@@ -1,0 +1,357 @@
+\documentclass{report}
+\usepackage{comment}
+\usepackage{graphicx} % Required for inserting images
+\graphicspath{ {./images/} }
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{fbb}
+\usepackage{amsthm}
+\usepackage[libertine]{newtxmath} 
+\usepackage[italic]{mathastext}
+\MTsetmathskips{f}{5mu}{1mu} 
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{fullpage}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{lipsum}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{refs.bib}
+\usepackage{setspace}
+\usepackage{chngcntr}
+\counterwithout{section}{chapter}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\geometry{hmargin=2.5cm,vmargin=3cm,lmargin=1.75cm,rmargin=1.75cm}
+\pagestyle{fancy}
+\setlength{\headheight}{12pt}
+\fancyhf{}
+\fancyhead[L]{\slshape\nouppercase{\leftmark}}
+\fancyhead[R]{\slshape\nouppercase{\rightmark}}
+\chead{\textsc{Dylan Laird}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand\contentsname{Summary}
+\setlength{\headsep}{1cm}
+\addbibresource{refs.bib}
+\renewcommand{\chaptername}{Section}
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}} % optional; useful if paragraphs are to be numbered
+
+\titleformat{\subsubsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+  {3.25ex \@plus1ex \@minus .2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+\def\toclevel@paragraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\begin{document}
+\newtheorem{mydef}{Definition}[subsection]
+\newtheorem{theorem}[mydef]{Theorem}
+\newtheorem{prop}[mydef]{Proposition}
+
+
+\makeatletter
+\def\@makechapterhead#1{%
+  %%%%\vspace*{50\p@}% %%% removed!
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \huge\bfseries \@chapapp\space \thechapter
+        \par\nobreak
+        \vskip 20\p@
+    \fi
+    \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    \vskip 20\p@
+  }}
+\def\@makeschapterhead#1{%
+  %%%%%\vspace*{50\p@}% %%% removed!
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \Huge \bfseries  #1\par\nobreak
+    \vskip 20\p@
+  }}
+\makeatother
+
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE École Normale supérieure de Lyon}\\[1cm] % Name of your university/college
+\includegraphics[height=2cm, keepaspectratio]{École_normale_supérieure_de_Lyon_Logo.svg.png}\\[1cm]
+
+\textsc{\LARGE Research Internship report}\\[1.25cm]
+\HRule \\[0.4cm]
+{ \huge \bfseries The Hypercubic Manifold}\\[0.3cm]
+{ \huge \bfseries in}\\[0.5cm] 
+{ \huge \bfseries Homotopy Type Theory}\\[0.3cm]
+\HRule \\[2cm]
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft}
+\emph{\Large \emph{\textbf{Author :}}}\\[0.2cm]
+\textsc{\Large Dylan LAIRD}\\
+\textit{Student at ENS Lyon}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft}
+\emph{\Large \emph{\textbf{Supervisers :}}}\\[0.2cm]
+\textsc{\Large Samuel MIMRAM}\\
+\textit{Full Professor at LIX, École Polytechnique}\\[0.1cm]
+\textsc{\Large Émile OLÉON}\\
+\textit{PhD student at LIX, École Polytechnique}\\
+\end{flushleft}
+\end{minipage}\\[0.5cm]
+
+\begin{figure}[h]
+    \begin{minipage}[c]{.46\linewidth}
+        \centering
+        \includegraphics[height= 5cm]{École_polytechnique_signature.svg.png}
+    \end{minipage}
+    \begin{minipage}[c]{.46\linewidth}
+        \centering
+        \includegraphics[height=5cm]{logo_lix.png}
+    \end{minipage}
+\end{figure}
+\vfill % Fill the rest of the page with whitespace
+\end{titlepage}
+
+\tableofcontents
+\newpage
+\chapter{Introduction}
+\textbf{Homotopy Type Theory} (which I will often refer to as \textbf{HoTT} in this report) is a new field in mathematics and computer science, at the crossroad of \textbf{Type Theory}, \textbf{Homotopy Theory}, \textbf{Category Theory} and the \textbf{Foundations of Mathematics}. It is based upon \textbf{Martin-Löf's Type Theory}, with the addition of the \textbf{Univalence Axiom} and \textbf{Higher Inductive Types} which allow one to give a homotopical interpretation of type theory, and thus doing homotopy theory within the synthetic framework of type theory.\\\\
+The \textbf{Hypercubic Manifold} is a topological manifold first introduced by \textbf{Henri Poincaré}, as one of many examples of adjunction spaces of polyhedrons. One of its main properties is that its \textbf{fundamental group} is the \textbf{Quaternion group}.
+\\\\
+Last but not least, HoTT has given rise to new foundations for Mathematics, namely the \textbf{Univalent Foundations}, which someday may become the foundation system for the mathematics done by every mathematician. HoTT allows one to proceed with \textbf{proof relevant} and \textbf{constructive} mathematics, that differ intrisically from classical mathematic in that proving a statement requires to build some terms from type forming rules. This, and more precisely the \textbf{Curry-Howard} isomorphism, is what allows to use proof assistants such as \textsc{Agda} or \textsc{Coq} to compute within Intuitionistic Type Theory. In the case of HoTT, a constructive interpretation of the Univalence Axiom was given with \textbf{cubical type theory}, which slightly differs from classical HoTT but allows to compute using the Univalence Axiom, for instance with the \textsc{cubical Agda} package.\\\\
+The goal of this internship was to prove some results about the Hypercubic Manifold within  HoTT and Cubical Type Theory using the agda proof assistant, and further extending the definition of this Manifold. An essential observation is that the combinatorial nature of the Hypercubic Manifold is quite rich, making the use of a proof assistant crucial to both produce and check any proof.\\\\
+Let's elaborate a bit on how this report is built. Sections $2$ to $6$
+\newpage
+\chapter{Pre-requesites}
+The following part is aimed at giving a sufficent background for one to be atble understand the material from the internship. The presentation is very much inspired from the \textbf{HoTT Book} \cite{hott}. We assume basic knowledge about Type systems and the Curry-Howard isomorphism. We will work in the informal type theory style which is the usual way of proceeding for our purpose.
+\begin{comment}
+\section{Category Theory}
+\subsection{Definitions and motivations}
+\paragraph{Categories} A category $\mathcal{C}$ consists of a class of \textbf{objects}, a class of \textbf{arrows} or \textbf{morphisms} that each have a \textbf{source} and a \textbf{target} which themselves are objects of $\mathcal C$. For each object $A$ of $\mathcal{C}$, there is an \textbf{identity morphism} $1_A$, and those arrows should behave as we expect: if two arrows $f$ and $g$ satisfy $\mathrm{codom} f =\mathrm{dom} g$ then there is an arrow $g \circ f$ which is the composite, and composition of arrows is associative and identity morphisms behave as identity elements for this law.
+\paragraph{Working examples}We will mainly be looking at two categories for now. The category $\textbf{Set}$ whose objects are sets and morphisms are function between these sets (we won't bother with the foundational aspects of why it is actually a thing that this category exists). As we will be dealing with homotopy theory, we should also be looking at the category $\textbf{Top}$ of topological spaces, and whose arrows are continuous maps between theses spaces (luckily, indentity maps are indeed continuous !).
+\paragraph{Products}
+In the category $\textbf{Set}$ one can take two sets $A$ and $B$ and look at the set $A\times B$. Category theory is the framework that allows to speak about these kind of constructions in a more general way. For instance, given a category $\mathcal{C}$ and two objects $A,B$ (those will be our standard notations from now on), we say that an object $X$ equipped with \textbf{projection morphisms} $\pi_1$ and $\pi_2i$ is a product of $A$ and $B$ if it satisfies the following \textbf{universal property}: for any object $Y$ and arrows $f : Y \rightarrow A$, $g : Y \rightarrow B$, there is a \textbf{unique} arrow $f \otimes g$ that makes the following diagram commute: 
+\begin{center}
+\[\begin{tikzcd}
+	&&&& Y \\
+	\\
+	\\
+	\\
+	A &&&& X &&&& B
+	\arrow["{\exists! f \otimes g}"{description}, dotted, from=1-5, to=5-5]
+	\arrow["{\pi_2}", from=5-5, to=5-9]
+	\arrow["{\pi_1}"', from=5-5, to=5-1]
+	\arrow["g", from=1-5, to=5-9]
+	\arrow["f"', shift right=2, from=1-5, to=5-1]
+\end{tikzcd}\]
+\end{center}
+It is essential to note that the very fact that we demanded a \textbf{universal property} insures that the product of $A$ and $B$ is \textbf{unique up to isomorphism} (we will not prove it but it is an elementary exercise). We say that $X$ is \textit{universal} for the previous property. In the case of the category $\textbf{Set}$, one recovers the product set of $A$ and $B$ and the same goes for the category $\textbf{Top}$.\\
+This is a general pattern that we will encounter throughout this section : we will define operations on objects of a certain category with universal properties that will ensure that they are unique up to isomorphism (which is all that matters). We will be looking at a few more categorical constructions that will be useful afterwards, and show what they allow us to do in homotopy theory.
+\subsection{Push-out diagrams}
+Given a span :
+\begin{center}
+    \[\begin{tikzcd}
+	Z &&& Y \\
+	\\
+	\\
+	X
+	\arrow["g", from=1-1, to=1-4]
+	\arrow["f"', from=1-1, to=4-1]
+\end{tikzcd}\]
+\end{center}
+the pushout of morphisms $f,g$ consists of an object $P$ with morphisms $i_1,i_2$ such that the following diagram commutes and that $(P,i_1,i_2)$ is universal with respect to this diagram : 
+\begin{center}
+    \[\begin{tikzcd}
+	Z &&& Y \\
+	\\
+	\\
+	X &&& P
+	\arrow["g", from=1-1, to=1-4]
+	\arrow["f"', from=1-1, to=4-1]
+	\arrow["{i_1}"', from=4-1, to=4-4]
+	\arrow["{i_2}", from=1-4, to=4-4]
+\end{tikzcd}\]
+\end{center}
+In the category $\textbf{Set}$, with $Z$ being the $\emptyset$, one recovers the \textbf{disjoint union} of sets. In a general case, one should think of $P$ as being a sum of $X$ and $Y$ where elements of $Z$ corresponding through $f$ and $g$ are identified. In the category $\textbf{Top}$, pushout exists and $P$ consists of $X \bigoplus Y / \equiv$ where $\equiv$ is the equivalence relation generated by $\{i_1(f(z)) = i_2(g(z)) \mid z \in Z \}$.
+\paragraph{The 1-skeleton of the hypercubic manifold} Later on, we will try and define the hypercubic manifold as a \textbf{pushout space}. For now, let's look at how one can obtain the \textbf{1-skeleton} of this manifold using a simple pushout. We aim to build a space with the following elements: 
+\begin{center}
+    \begin{itemize}
+        \item two points $\textbf{blue}$ and $\textbf{white}$
+        \item four edges $\textbf{red}^E$, $\textbf{blue}^E$, $\textbf{yellow}^E$, $\textbf{green}^E$ from point $\textbf{white}$ to  $\textbf{blue}$
+    \end{itemize}
+\end{center}
+To do so let $\mathrm{Edges} = \{\textbf{red}^E,\textbf{blue}^E,\textbf{yellow}^E,\textbf{green}^E\}$, $\mathrm{Source}=\{\textbf{white}\}$ and $\mathrm{Target}=\{\textbf{blue}\}$. The the following pushout 
+\end{comment}
+\section{Type Theory}
+In type theory, all that we manipulate are \textbf{types} $A,B$ and \textbf{terms} of those types for instance $a : A$ and we have \textbf{type forming rules} to form terms of types from already existing types. The most infamous example is the one of the natural integers:
+\paragraph{Type : $\mathbb N$}
+\begin{itemize}
+    \item $0 : \mathbb N$
+    \item $\mathrm{suc}: \mathbb N \rightarrow \mathbb N$
+\end{itemize}
+The type of natural integers also comes with its infamous \textbf{induction principle}, which says that to prove a predicate over \(\mathbb{N}\) one has to prove it for $0$ and that it is preserved by $\mathrm{suc}$. In type theory, since all we work with are types, we will also have induction principles that come along any type we define.\\
+It is to be noted that \textbf{equality} plays a central role in Type Theory. We distinguish two kind of equalities, \textbf{definitional equality}, which we will note $\equiv$, it isn't an actual part of Type Theory but lives at the same level as judgements "$a : A $". For example, setting $f$ to be the function $x \mapsto x^2 $ (say over the integers), for any integer $a$ we would then have $f a \equiv a^2$, which is to be read as "$f a$ is definitionnaly equal to $a^2$".\\
+It must not be mistaken with \textbf{(propositional) equality} which we will take a closer look at later on. For now, let's just recall that in Type Theory every object is a type and so, for two elements $a,b :A$ we can build the type $a =_A b$, namely the \textbf{identity type} of $a$ and $b$, and to prove that $a$ and $b$ are equal elements (of $A$), one has to produce an element $p : a=_A b$.\\
+
+\subsection{Function types}
+In this section we'll see how to work out product types, it is a very important one because it contains a lot of ideas and formalism about Type Theory that will be assumed afterwards
+Given two types $A,B$, one can build the \textbf{type} $A \rightarrow B$ of functions from $A$ to $B$. \\
+To build an element of that type, one needs to give an expression $\Phi(x)$ such that : $a : A \vdash \Phi(a) : A$, and can define an element $f$ with the following syntax: 
+$$f(x) :\equiv \Phi(x) \hspace{5pt}\text{(such definitions yield \textbf{definitional} equalities)}$$
+We may also use standard notations from mathematics or $\lambda$-calculus depending on the context.
+\subsection{Universes, type families and dependent function types}
+To introduce types more formally, we need to talk about \textbf{universes}, which, as in set theory, allow us to avoid unsoundness problems (such as Russel paradox). Details need not concern us here, let's just get straight to the point: we suppose that we have a \textbf{cumulative hierarchy} of universes $\mathcal{U}_i$, and elements of such a universe are themselves some type. Hence, giving ourselves a type $A$ is tantamount to giving ourselves an element from some universe $\mathcal{U}$ (we will not mention the level from now on).\\
+ Universes allow us to introduce \textbf{Type familes}, that is, a type family over a type $A$ is a function of type $A \to \mathcal{U}$. Type families will play an increasingly important role in our Type Theory and afterwards in the homotopical interpretation.\\
+ \paragraph{Dependent function types ($\Pi$-types)}
+ For now, let's note that we can talk about \textbf{dependant functions}. Given a type $A$ and a type family $C: A \rightarrow \mathcal{U}$, one can build the type of dependent functions over $A$, whose codomain can vary along $C$: 
+$$\prod_{x : A} C(x)$$
+The formation rule is the same as before, one can build an element $f$ of type $\prod_{x : A} C(x)$ with an expression $\Phi(x)$ such that $a : A \vdash \Phi(a) : C(a)$ and by setting $f(x) :\equiv \Phi(x)$.
+\subsection{Product types}
+Given types $A,B : \mathcal{U}$ one can build their \textbf{cartesian product type} $A \times B : \mathcal{U}$. The formation rule is as natural as it gets, given $a : A$ and $b : B$ one can form $(a,b) : A \times B$. We shall now encounter our first \textbf{recursion principle}, which in the general case, encompasses how to build \textbf{non-dependent functions} out of a certain type. The recursion principle for product types allows us to define a function over $A\times B$ by specifiying its values on pairs $(a,b)$. This principle can be phrased in a proper type theoretic way as follows:
+$$\mathrm{rec}_{A\times B} : \prod_{C : \mathcal{U}} (A \rightarrow B \rightarrow C) \rightarrow A\times B \rightarrow C$$
+with the defining equation:
+$$\mathrm{rec}_{A\times B}(C,f,(a,b)) :\equiv f(a)(b)$$ 
+From now on, we will only refer informally to the recursion and induction principles without writing them out formally.\\
+As an example, we can now define the first projection $\mathrm{pr}_1 : A\times B \rightarrow A$ by $\mathrm{pr}_1(a,b) :\equiv a$ and the second projection by $\mathrm{pr}_2 (a,b) :\equiv b$.\\ 
+It is time to elaborate on a central philosophical aspect of Type Theory. In classical mathematics, one constructs the product of sets $A$ and $B$ with the sets of all pairs of the form $(a,b)$. In Type Theory however, we have not (yet) seen any mention that the type $A\times B$ is the "type of all pairs $(a,b)$", meaning that there may be some element $x : A \times B$ which is \textit{not} a pair $(a,b)$. In fact, it turns out that we do have a \textbf{uniqueness principle} for product types, which ressembles to what we would expect, however, as we are working within Type Theory we cannot expect it to be more than a \textbf{propositional uniqueness principle}. Before stating it, we need to take a look at the \textbf{induction principle} for product types, which in the general case encompasses how to build \textbf{dependent functions} out of a certain type. In our case, as for the recursion principle, defining a dependent function $f$ over $A \times B$ only requires to define over pairs $(a,b)$.\\
+We are now set to prove the \textbf{propositional uniqueness principle of product types} :
+\begin{prop}
+  For any $x : A \times B$, one has : $x =_{A \times B} (\mathrm{pr}_1(x),\mathrm{pr}_2(x))$, that is, we have a dependent function:
+  $$\mathrm{uniq}_{A\times B} : \prod_{x : A \times B} \big(x =_{A \times B} (\mathrm{pr}_1(x),\mathrm{pr}_2(x))\big)$$
+\end{prop}
+\begin{proof}
+     Here, we want to build the dependent function $\mathrm{uniq}_{A\times B}$. We will hence be using the induction principle for product types, which states that we need to exhibit for any pair $a : A$ and $b : B$ an element$f(a)(b)$ of type $(a,b)=_{A \times B} (\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$. However,  $(\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$ is \textbf{definitionnally} equal to $(a,b)$ (by the definition that we have given of the projections) and so we are reduced to exhibit $f(a)(b) : (a,b)=_{A \times B} (a,b)$.\\ 
+     We shall now use a fact that we haven't seen yet about identity types, but that should seem familiar, is that for any $x$ of some type $X$ the type $x=_{X}x$ is inhabited by an element $\mathrm{refl}_x$.\\
+     We can therefore set $f(a)(b) :\equiv \mathrm{refl}_{(a,b)}$ to terminate the proof.
+\end{proof}
+\paragraph{Remark} We have thus shown a Type Theoretic version of the fact that the product set is the set of all pairs. It is important to understand how it all unfolded \textit{from} the induction principle for product types, whereas in classical mathematics, we deduce from the fact that the product set is the set of all pairs that we can define a function over the set $A \times B$ by specifying its values on every pair. 
+\subsection{Dependent pair types ($\Sigma$-types)}
+Given a type $A$ and a type family $B : A \rightarrow \mathcal{U}$, one can construct the \textbf{dependent pair type}: 
+$$\sum_{x : A} B(x)$$
+To form an element of such a type, one needs elements $a : A$ and $b : B(a)$, resulting in an element $(a,b) : \sum_{x : A} B(x)$. It should be noted that theses types are a generalization of product types and that for the constant type family at $B$, $C :\equiv \lambda (x : A).B$ we have $\sum_{x = A} C(x)\equiv A \times B$.\\
+As for product types, one can define dependent and non dependent functions $f$ over the type $\sum_{x : A} B(x)$ by specifiying its values on dependant pairs $(a,b)$ where $b:B(a)$.\\ 
+The recursion principle allows us to define (again) the first projection $\mathrm{pr}_1 : \sum_{x : A} B(x) \rightarrow A$ by $\mathrm{pr}_1 (a,b) :\equiv a$.\\
+However, defining the second projection is now a bit trickier since it should have the type $\prod_{p : \sum_{x : A} B(x)} \mathrm{pr}_1(p)$, making it a dependent function. It thus requires the use of the induction principle, and we can define it by its values on dependant pairs by $\mathrm{pr}_2(a,b) :\equiv b$.\\
+$\Sigma$-types will play a crucial role later on when we'll be looking at homotopy type theory.
+\subsection{Coproduct types}
+Given types $A$ and $B$, one can define their coproduct type:
+\paragraph{Type : $A+B$}
+\begin{itemize}
+  \item inl : $A \rightarrow A+B$
+  \item inr : $B \rightarrow A+B$
+\end{itemize}
+It should be thought of as containing two disjoints copies of $A$ and $B$. The induction principle is here tantamount to \textbf{case analysis}, to define a function over $A+B$ one needs to specify its value on elements $inl(a)$ for $a:A$ and on elements $inr(b)$ for $b:B$. 
+\subsection{Propositions as types}
+We will be looking at Type Theory in details in the next section, for now let's just take a look at the following table showing the \textbf{Proposition as Types correspondance} also known as the \textbf{Curry-Howard isomorphism}:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline Types & Logic  \\
+\hline$A$ & $A$ is a proposition  \\
+\hline$a: A$ & $a$ is a proof of $A$ \\
+\hline $\textbf{0},\textbf{1}$ & $\perp, \top$ \\
+\hline$A+B$ & $A \vee B$  \\
+\hline$A \times B$ & $A \wedge B$  \\
+\hline$A \rightarrow B$ & $A \Rightarrow B$ \\
+\hline$A \rightarrow \textbf{0}$ & $\lnot A$ \\
+\hline
+\end{tabular}
+\end{center}
+This correspondence shows the similarity in between type forming rules and rules of propositional logic when seeing "propositions as types" and vice versa. \\
+For instance, if one wants to build a term of type $A \times B$, one needs a term $a : A$ and a term $b : B$ to form $(a,b) : A \times B$. Similarly, to prove the proposition $A \land B$, one needs a proof of $A$ and a proof of $B$. \\
+In the same way, building a function $f : A \rightarrow B$ (or a proof of $A \implies B)$ requires to be able to build an element of $B$ (a proof of $B$) given an element an $A$ (given a proof of $A$).\\
+This correspondence is much richer than the minimal version given above, but hopefully this should suffice to show the deep interconnection.\\
+Under this correspondence, it makes sense to talk about a predicate over a type $A$ for a type family $P : A \rightarrow \mathcal{U}$.
+\subsection{Identity types family}
+For a type $A: \mathcal{U}$ we have a type family $\mathrm{Id} : A \rightarrow A \rightarrow \mathcal{U}$ (we will write $x=y$ for $\mathrm{Id}_A(x)(y)$ if the context is clear) and a dependent function called reflexivity:
+$$\mathrm{refl} : \prod_{x : A} (x=x)$$
+For two elements $x,y : A$ we say that $x=y$ if the type $x=_A y$ is inhabited.
+\paragraph{Path induction}
+Let's illustrate the induction principle for \textbf{indentity type families}, called path induction by proving that functions preserve equals.
+\begin{prop}
+Let $f : A \rightarrow B$, then for any $x,y :A$ there is a function :
+$$\mathrm{ap}_f : (x=y) \rightarrow (f(x)=f(y))$$ 
+\end{prop}
+\begin{proof}
+The \textbf{path induction} principle indicates that to prove this predicate for any $x,y : A$ and $p : x=y$, we only need to prove it when $x\equiv y$ and $p \equiv \mathrm{refl}_x$. We thus want an element of type  $f(x) = f(y)$, but under our assumptions $f(x) \equiv f(y)$ and so $(f(x)=f(y)) \equiv (f(x)=f(x))$ and so by setting $\mathrm{ap}_f(\mathrm{refl}_{f(x)}) :\equiv \mathrm{refl}_{f(x)}$ we can terminate the proof. 
+\end{proof}
+Under the proposition as types interpretation, this induction principle states that to prove a predicate over a \textit{family} of identity types, namely $P : \prod_{x,y : A} (x=y) \rightarrow \mathcal{U}$, it suffices to prove it in the case where both ends are definitionnaly equal and that their proof of equality is reflexivity. There is another (but equivalent) induction principle called \textbf{based path induction} where one of the ends $x$ or $y$ is fixed to a certain element of $A$. However, in both these versions it is crucial to note that the induction principle is about a \textit{family} of identity types, and not one identity type with both ends fixed.\\
+As an example, this principle does \textit{not} imply that every identity type is "trivial". Such a statement would go along those lines "for $a : A$ and $p: a=a$ we have that $p = \mathrm{refl}_a$. This statement isn't about identity types \textit{families} so our induction principle does not apply.
+\section{Homotopy Type Theory}
+\subsection{Classical homotopy theory}
+In classical topology, if $X$ is a topological space and $x,y$ are points of $X$, a \textit{path} between $x$ and $y$ is a continuous map $p : [0,1] \rightarrow X$ such that $p(0)=x$ and $p(1)=y$.\\
+A \textbf{homotopy} in between two paths $p,q$ from $x$ to $y$ is then a continuous map $H : [0,1] \times [0,1] \rightarrow X$ such that $(x \mapsto H(0,x) )= p$, $(x \mapsto H(1,x)) = q$ and that for any $t \in [0,1]$, $x\mapsto H(t,x)$ is a path from $x$ to $y$. A homotopy between paths $p$ and $q$ should be thought of as a continuous deformation between those two paths. Moreover, there are two natural operations on paths:
+\begin{itemize}
+    \item \textbf{concatenation} : if $p$ is a path from $x$ to $y$ and $q$ is a path from $y$ to $z$ then there is a path $p \cdot q$ from $x$ to $z$ defined by following $p$ then $q$
+    \item \textbf{inversion} : if $p$ is a path from $x$ to $y$ then we can follow the path $p$ the other way round to obtain its inverse $p^{-1}$ which is a path from $y$ to $x$
+\end{itemize}
+The special case of \textbf{loops} is obtained by looking at path with the same starting point and ending point. Then the two previous operations are always defined on loops with the same basepoint $x$. More interestingly, those operations are consistant with homotopy of loops and the constant path at point $x$ acts as a unit element.\\ 
+We therefore obtain a group structure for loops (up to homotopy) at basepoint $x$ which is called the \textbf{fundamental group} of $X$ at point $x$ and denoted by $\pi_1(X,x)$. One key property is that \textbf{homeomorphisms} of topological spaces induce \textbf{isomorphisms} for every fundamental group. Since homotopies themselves are continuous maps of topological spaces, one can look at homotopies between homotopies and so on, and we can define some \textbf{higher homotopy groups} $\pi_2,\pi_3,\ldots$
+\paragraph{Homotopy type theory} So, how does it relate to our type theory? At first, one could think of our types as set, like the example of $\mathbb N$ would suggest, and for instance the product type would be analogous to the product set. However, in the previous section we have seen identity types and how these types are generally speaking \textit{not} trivial (that is, every inhabitant is $\mathrm{refl}$).  Thanks to identity types, we would rather think of types as spaces as it is suggested by the following table:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline Types & Topology  \\
+\hline$A$ & a space $A$   \\
+\hline$a: A$ & $a$ is a point of $A$ \\
+\hline $p : x=_A y$ & $p$ is a path from $x$ to $y$ in the space $A$ \\
+\hline
+\end{tabular}
+\end{center}
+However, this does not make sense until we have proven some additional properties about identity types that should relate to the ones of paths in topology.
+\subsection{Types as infinite groupoids}
+\subsection{Paths as functors}
+\subsection{Type families as fibrations}
+\subsection{Higher Inductive Types}
+\section{Cubical Type Theory and the \textsc{Agda} proof assistant}
+\begin{lstlisting}[mathescape=true]
+    data Torus1 : Type where
+    base : Torus1
+    loop : base $\equiv$ base    
+\end{lstlisting}
+\newpage
+\section{Bibliography}
+\cite{hott}
+\printbibliography
+\newpage
+\section{Acknowledgements}
+\newpage
+\section{Annex}
+\end{document}
