@@ -178,7 +178,7 @@ g (i3 (c₋₁ i)) = refl i
 -}
 2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
 
-
+{-
 {- Le 2-squelette de la variété hypercubique -}
 
 data Hypercubic2 : Type where 
@@ -316,7 +316,7 @@ sec2 : Hypercubic2 → 2Sq
 sec2 blueV = inl(inr(blueV))
 sec2 whiteV = inl(inl(whiteV))
 
-{-Correspondanc entre les arêtes-}
+{-Correspondance entre les arêtes-}
 sec2 (yellowE i) = inl(push yellowE i)
 sec2 (greenE i) = inl(push greenE i)
 sec2 (redE i) = inl (push redE i)
@@ -350,6 +350,7 @@ sec2 (f3 i j) = {!   !}
 sec2 (f5 i j) = {!   !}
 -}
 
+-}
 
 
 
