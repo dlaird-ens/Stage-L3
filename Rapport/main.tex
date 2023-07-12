@@ -336,7 +336,25 @@ We therefore obtain a group structure for loops (up to homotopy) at basepoint $x
 \end{tabular}
 \end{center}
 However, this does not make sense until we have proven some additional properties about identity types that should relate to the ones of paths in topology.
-\subsection{Types as infinite groupoids}
+\subsection{Equality and Homotopy}
+We want to establish the following correspondence in between properties on indentity types and paths in homotopy:
+\begin{center}
+\begin{tabular}{|c|c|}
+  \hline Equality & Homotopy \\
+  \hline reflexivity & constant path \\
+  \hline symmetry  & path inversion \\
+  \hline transitivity & concatenation of paths \\
+  \hline
+\end{tabular}
+\end{center}
+\begin{prop}
+For $A : \mathcal{U}$ and $x,y : A$ there is a function : 
+  $$\mathrm{inv} : (x=y) \rightarrow (y=x)$$
+such that $\mathrm{inv}(\mathrm{refl}_x) \equiv \mathrm{refl}_x$. We will denote $\mathrm{inv}(p)$ by $p^{-1}$.
+\end{prop}
+\begin{proof}
+By path induction, we only need to define it in the case where $x \equiv y$ and $p \equiv \mathrm{refl}_x$, we then have $(y=x) \equiv (x=x)$ and we terminate the proof by setting $\mathrm{inv}(\mathrm{refl}_x) :\equiv \mathrm{refl}_x$.
+\end{proof}
 \subsection{Paths as functors}
 \subsection{Type families as fibrations}
 \subsection{Higher Inductive Types}
