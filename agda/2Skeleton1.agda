@@ -23,28 +23,46 @@ g (i1 c₀₀) = f1
 g (i1 c₀₁) = f1
 g (i1 c₁₀) = f1
 g (i1 c₁₁) = f1
-g (i1 (c₀₋ i)) = refl i
-g (i1 (c₁₋ i)) = refl i
-g (i1 (c₋₀ i)) = refl i
-g (i1 (c₋₁ i)) = refl i
+g (i1 (c₀₋ i)) = f1
+g (i1 (c₁₋ i)) = f1
+g (i1 (c₋₀ i)) = f1
+g (i1 (c₋₁ i)) = f1
 g (i2 c₀₀) = f3
 g (i2 c₀₁) = f3
 g (i2 c₁₀) = f3
 g (i2 c₁₁) = f3
-g (i2 (c₀₋ i)) = refl i
-g (i2 (c₁₋ i)) = refl i
-g (i2 (c₋₀ i)) = refl i
-g (i2 (c₋₁ i)) = refl i
+g (i2 (c₀₋ i)) = f3
+g (i2 (c₁₋ i)) = f3
+g (i2 (c₋₀ i)) = f3
+g (i2 (c₋₁ i)) = f3
 g (i3 c₀₀) = f5
 g (i3 c₀₁) = f5
 g (i3 c₁₀) = f5
 g (i3 c₁₁) = f5
-g (i3 (c₀₋ i)) = refl i
-g (i3 (c₁₋ i)) = refl i
-g (i3 (c₋₀ i)) = refl i
-g (i3 (c₋₁ i)) = refl i
+g (i3 (c₀₋ i)) = f5
+g (i3 (c₁₋ i)) = f5
+g (i3 (c₋₀ i)) = f5
+g (i3 (c₋₁ i)) = f5
 
 2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
+
+
+
+
+
+
+isContrSquare :
+  {ℓ : Level} {A : Type ℓ}
+  {a₀₀ a₀₁ : A} {a₀₋ : a₀₀ ≡ a₀₁}
+  {a₁₀ a₁₁ : A} {a₁₋ : a₁₀ ≡ a₁₁}
+  {a₋₀ : a₀₀ ≡ a₁₀} {a₋₁ : a₀₁ ≡ a₁₁}
+  (s : Square a₀₋ a₁₋ a₋₀ a₋₁)
+  -- → isContr s
+  (i j : I) → a₀₀ ≡ s i j
+isContrSquare {a₀₀ = a₀₀} s i j k = s (i ∧ k) (j ∧ k)
+
+
+
 
 ret2 : 2Sq → Hypercubic2
 
@@ -58,22 +76,22 @@ ret2 (inl (push blueE i)) = blueE i
 ret2 (inl (push greenE i)) = greenE i
 ret2 (inl (push yellowE i)) = yellowE i
 
-ret2 (inr f1) = {!!}
-ret2 (inr f3) = {!   !}
-ret2 (inr f5) = {!   !}
+ret2 (inr f1) = blueV
+ret2 (inr f3) = blueV
+ret2 (inr f5) = blueV
 
-ret2 (push (i1 c₀₀) i) = {!   !}
-ret2 (push (i1 c₀₁) i) = {!   !}
-ret2 (push (i1 c₁₀) i) = {!   !}
-ret2 (push (i1 c₁₁) i) = {!   !}
-ret2 (push (i1 (c₀₋ i)) j) = {!   !}
-ret2 (push (i1 (c₁₋ i)) j) = {!   !}
-ret2 (push (i1 (c₋₀ i)) j) = {!   !}
-ret2 (push (i1 (c₋₁ i)) j) = {!   !}
-ret2 (push (i2 c₀₀) i) = {!   !}
-ret2 (push (i2 c₀₁) i) = {!   !}
-ret2 (push (i2 c₁₀) i) = {!   !}
-ret2 (push (i2 c₁₁) i) = {!   !}
+ret2 (push (i1 c₀₀) i) = blueV
+ret2 (push (i1 c₀₁) i) = yellowE i
+ret2 (push (i1 c₁₀) i) = blueE i
+ret2 (push (i1 c₁₁) i) = (sym redE ∙ yellowE) i
+ret2 (push (i1 (c₀₋ i)) j) = yellowE ((~ i) ∨ j)
+ret2 (push (i1 (c₁₋ i)) j) = {!!}
+ret2 (push (i1 (c₋₀ i)) j) = {!!}
+ret2 (push (i1 (c₋₁ i)) j) = {!!}
+ret2 (push (i2 c₀₀) i) = {!!}
+ret2 (push (i2 c₀₁) i) = {!!}
+ret2 (push (i2 c₁₀) i) = {!!}
+ret2 (push (i2 c₁₁) i) = {!!}
 ret2 (push (i2 (c₀₋ ₁)) j) = {!   !}
 ret2 (push (i2 (c₁₋ i)) j) = {!   !}
 ret2 (push (i2 (c₋₀ i)) j) = {!   !}
@@ -85,7 +103,32 @@ ret2 (push (i3 c₁₁) i) = {!   !}
 ret2 (push (i3 (c₀₋ i)) j) = {!   !}
 ret2 (push (i3 (c₁₋ i)) j) = {!   !}
 ret2 (push (i3 (c₋₀ i)) j) = {!   !}
-ret2 (push (i3 (c₋₁ i)) j) = {!   !} 
+ret2 (push (i3 (c₋₁ i)) j) = {!   !}
+
+inl12 : 1Sq → 2Sq
+inl12 = inl
+
+inr12 : sides → 2Sq
+inr12 = inr
+
+push12 : (x : triple Circle Circle Circle) → inl12 (f x) ≡ inr12 (g x)
+push12 = push
+
+lemme : {ℓ : Level} {A : Type ℓ} (f : Circle → A) (a : A) (p : (x : Circle) → a ≡ f x) → Square (cong f c₀₋) (cong f c₁₋) (cong f c₋₀) (cong f c₋₁)
+lemme f aa p = {!!}
+
+sf1 : Square
+        {A = 2Sq}
+        {inl (inr blueV)}
+        {inl (inl whiteV)}
+        (cong inl12 (sym (push yellowE)))
+        {inl (inl whiteV)}
+        {inl (inr blueV)}
+        (cong inl12 (push greenE))
+        (cong inl12 (sym (push blueE)))
+        (cong inl12 (push redE))
+sf1 = {!!}
+
 sec2 : Hypercubic2 → 2Sq
 {-Correspondance entre les sommets-}
 
@@ -99,6 +142,6 @@ sec2 (redE i) = inl (push redE i)
 sec2 (blueE i) = inl (push blueE i)
 
 {-Correspondance entre les remplissements des faces-}
-sec2 (f1 i j) = {!   !}
-sec2 (f3 i j) = {!   !}
-sec2 (f5 i j) = {!   !}
+sec2 (f1 i j) = sf1 i j
+sec2 (f3 i j) = {!!}
+sec2 (f5 i j) = {!!}
