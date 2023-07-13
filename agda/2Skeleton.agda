@@ -31,6 +31,20 @@ private
                   V                             V
                   1Sq------------inl---------->2Sq
 -}
+
+{- Le 2-squelette de la variété hypercubique -}
+
+data Hypercubic2 : Type where 
+    blueV : Hypercubic2
+    whiteV : Hypercubic2
+    yellowE : whiteV ≡ blueV 
+    greenE : whiteV ≡ blueV 
+    redE : whiteV ≡ blueV
+    blueE : whiteV ≡ blueV
+    f1 : Square (sym yellowE) greenE (sym blueE) redE
+    f3 : Square (sym yellowE) blueE (sym redE) greenE
+    f5 : Square (sym blueE) greenE (sym redE) yellowE
+
 data Circle : Type where 
 {-Version du cercle avec 4 points et 4 chemins les reliant, ici j'ai choisi les conventions qui sont utilisées pour les Square-}
   c₀₀ : Circle
@@ -42,40 +56,11 @@ data Circle : Type where
   c₋₀ : c₀₀ ≡ c₁₀
   c₋₁ : c₀₁ ≡ c₁₁
 
-
-data side : Type where 
-{-Le type d'une face à savoir 4 sommets, 4 arêtes et une preuve que c'est une face, même convention que pour les Square-}
-  s₀₀ : side
-  s₀₁ : side
-  s₁₀ : side
-  s₁₁  : side 
-  s₀₋ : s₀₀ ≡ s₀₁
-  s₁₋ : s₁₀ ≡ s₁₁ 
-  s₋₀ : s₀₀ ≡ s₁₀
-  s₋₁ : s₀₁ ≡ s₁₁
-  2cell : Square s₀₋ s₁₋ s₋₀ s₋₁
-
-
 data triple (A : Type) (B : Type) (C : Type): Type where 
 {-Réalise l'union disjointe de trois types-}
   i1 : A → triple A B C 
   i2 : B → triple A B C 
   i3 : C → triple A B C 
-
-{-On a 3 faces donc on se donne une union disjointe de trois faces. Le nom des injections canoniques correspond à celui des faces de la variété-}
-
-
-data sides : Type where 
-  f1 : side → sides 
-  f3 : side → sides 
-  f5 : side → sides 
-
-{-
-data sides : Type where
-  f1 : sides
-  f3 : sides 
-  f5 : sides
--}
 
 f : (triple Circle Circle Circle) → 1Sq
 
@@ -114,6 +99,34 @@ f (i3 (c₋₀ i)) = sym (push redE) i
 f (i3 (c₋₁ i)) = push yellowE i
 
 
+
+
+
+
+
+
+
+
+
+-- 1ère tentatative avec des vraies face "Square"
+
+data side : Type where 
+{-Le type d'une face à savoir 4 sommets, 4 arêtes et une preuve que c'est une face, même convention que pour les Square-}
+  s₀₀ : side
+  s₀₁ : side
+  s₁₀ : side
+  s₁₁  : side 
+  s₀₋ : s₀₀ ≡ s₀₁
+  s₁₋ : s₁₀ ≡ s₁₁ 
+  s₋₀ : s₀₀ ≡ s₁₀
+  s₋₁ : s₀₁ ≡ s₁₁
+  2cell : Square s₀₋ s₁₋ s₋₀ s₋₁
+
+data sides : Type where 
+  f1 : side → sides 
+  f3 : side → sides 
+  f5 : side → sides
+
 g : (triple Circle Circle Circle) → sides 
 
 {-La première face, qui doit correspondre à la face latérale gauche de la variété hypercubique, i.e f1 -}
@@ -148,49 +161,7 @@ g (i3 (c₁₋ i)) = f5 (s₁₋ i)
 g (i3 (c₋₀ i)) = f5 (s₋₀ i)
 g (i3 (c₋₁ i)) = f5 (s₋₁ i)
 
-
-{-
-g : (triple Circle Circle Circle) → sides
-g (i1 c₀₀) = f1
-g (i1 c₀₁) = f1
-g (i1 c₁₀) = f1
-g (i1 c₁₁) = f1
-g (i1 (c₀₋ i)) = refl i
-g (i1 (c₁₋ i)) = refl i
-g (i1 (c₋₀ i)) = refl i
-g (i1 (c₋₁ i)) = refl i
-g (i2 c₀₀) = f3
-g (i2 c₀₁) = f3
-g (i2 c₁₀) = f3
-g (i2 c₁₁) = f3
-g (i2 (c₀₋ i)) = refl i
-g (i2 (c₁₋ i)) = refl i
-g (i2 (c₋₀ i)) = refl i
-g (i2 (c₋₁ i)) = refl i
-g (i3 c₀₀) = f5
-g (i3 c₀₁) = f5
-g (i3 c₁₀) = f5
-g (i3 c₁₁) = f5
-g (i3 (c₀₋ i)) = refl i
-g (i3 (c₁₋ i)) = refl i
-g (i3 (c₋₀ i)) = refl i
-g (i3 (c₋₁ i)) = refl i
--}
 2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
-
-{-
-{- Le 2-squelette de la variété hypercubique -}
-
-data Hypercubic2 : Type where 
-    blueV : Hypercubic2
-    whiteV : Hypercubic2
-    yellowE : whiteV ≡ blueV 
-    greenE : whiteV ≡ blueV 
-    redE : whiteV ≡ blueV
-    blueE : whiteV ≡ blueV
-    f1 : Square (sym yellowE) greenE (sym blueE) redE
-    f3 : Square (sym yellowE) blueE (sym redE) greenE
-    f5 : Square (sym blueE) greenE (sym redE) yellowE
 
 ret2 : 2Sq → Hypercubic2 
 
@@ -265,9 +236,76 @@ ret2 (push (i3 c₁₁) i) = refl i
 ret2 (push (i3 (c₀₋ i)) j) = (refl i) j
 ret2 (push (i3 (c₁₋ i)) j) = (refl i) j
 ret2 (push (i3 (c₋₀ i)) j) = (refl i) j
-ret2 (push (i3 (c₋₁ i)) j) = (refl i) j 
+ret2 (push (i3 (c₋₁ i)) j) = (refl i) j
 
+sec2 : Hypercubic2 → 2Sq
+
+{-Correspondance entre les sommets-}
+sec2 blueV = inl(inr(blueV))
+sec2 whiteV = inl(inl(whiteV))
+
+{-Correspondance entre les arêtes-}
+sec2 (yellowE i) = inl(push yellowE i)
+sec2 (greenE i) = inl(push greenE i)
+sec2 (redE i) = inl (push redE i)
+sec2 (blueE i) = inl(push blueE i)
+
+{-Correspondance entre les remplissements des faces.
+Ici, on voudrait mettre des trucs de la forme inr(f1 (2cell i j))).
+Cependant, en regardant ce que demande les trous on voit que systématiquement 
+les sens des Red/Blue demandés sont inversés par rapport à ce qui est donné dans la déf de Hypercubic2?
+Ca c'est le soucis qui fait que ça passe pas encore, mais j'ai l'impression que c'est surmontable-}
+sec2 (f1 i j) = {!!}
+sec2 (f3 i j) = {!   !}
+sec2 (f5 i j) = {!   !}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- 2ème tentative avec des faces ponctuelles
 {-
+data sides : Type where
+  f1 : sides
+  f3 : sides 
+  f5 : sides
+
+g : (triple Circle Circle Circle) → sides
+g (i1 c₀₀) = f1
+g (i1 c₀₁) = f1
+g (i1 c₁₀) = f1
+g (i1 c₁₁) = f1
+g (i1 (c₀₋ i)) = refl i
+g (i1 (c₁₋ i)) = refl i
+g (i1 (c₋₀ i)) = refl i
+g (i1 (c₋₁ i)) = refl i
+g (i2 c₀₀) = f3
+g (i2 c₀₁) = f3
+g (i2 c₁₀) = f3
+g (i2 c₁₁) = f3
+g (i2 (c₀₋ i)) = refl i
+g (i2 (c₁₋ i)) = refl i
+g (i2 (c₋₀ i)) = refl i
+g (i2 (c₋₁ i)) = refl i
+g (i3 c₀₀) = f5
+g (i3 c₀₁) = f5
+g (i3 c₁₀) = f5
+g (i3 c₁₁) = f5
+g (i3 (c₀₋ i)) = refl i
+g (i3 (c₁₋ i)) = refl i
+g (i3 (c₋₀ i)) = refl i
+g (i3 (c₋₁ i)) = refl i
+
+2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
+
 ret2 : 2Sq → Hypercubic2
 
 -- Correspondance des sommets
@@ -308,30 +346,6 @@ ret2 (push (i3 (c₀₋ i)) j) = {!   !}
 ret2 (push (i3 (c₁₋ i)) j) = {!   !}
 ret2 (push (i3 (c₋₀ i)) j) = {!   !}
 ret2 (push (i3 (c₋₁ i)) j) = {!   !} 
--}
-
-sec2 : Hypercubic2 → 2Sq
-
-{-Correspondance entre les sommets-}
-sec2 blueV = inl(inr(blueV))
-sec2 whiteV = inl(inl(whiteV))
-
-{-Correspondance entre les arêtes-}
-sec2 (yellowE i) = inl(push yellowE i)
-sec2 (greenE i) = inl(push greenE i)
-sec2 (redE i) = inl (push redE i)
-sec2 (blueE i) = inl(push blueE i)
-
-{-Correspondance entre les remplissements des faces.
-Ici, on voudrait mettre des trucs de la forme inr(f1 (2cell i j))).
-Cependant, en regardant ce que demande les trous on voit que systématiquement 
-les sens des Red/Blue demandés sont inversés par rapport à ce qui est donné dans la déf de Hypercubic2?
-Ca c'est le soucis qui fait que ça passe pas encore, mais j'ai l'impression que c'est surmontable-}
-sec2 (f1 i j) = {!!}
-sec2 (f3 i j) = {!   !}
-sec2 (f5 i j) = {!   !}
-
-{-
 sec2 : Hypercubic2 → 2Sq
 {-Correspondance entre les sommets-}
 
@@ -348,7 +362,6 @@ sec2 (blueE i) = inl (push blueE i)
 sec2 (f1 i j) = {!   !}
 sec2 (f3 i j) = {!   !}
 sec2 (f5 i j) = {!   !}
--}
 
 -}
 
