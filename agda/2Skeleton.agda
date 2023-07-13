@@ -170,6 +170,12 @@ congSquare f s i j = f (s i j)
 sf1' : Square (cong (inr12 ∘ f1) s₀₋) (cong (inr12 ∘ f1) s₁₋) (cong (inr12 ∘ f1) s₋₀) (cong (inr12 ∘ f1) s₋₁)
 sf1' = congSquare (inr12 ∘ f1) 2cell
 
+sf3' : Square (cong (inr12 ∘ f3) s₀₋) (cong (inr12 ∘ f3) s₁₋) (cong (inr12 ∘ f3) s₋₀) (cong (inr12 ∘ f3) s₋₁)
+sf3' = congSquare (inr12 ∘ f3) 2cell
+
+sf5' : Square (cong (inr12 ∘ f5) s₀₋) (cong (inr12 ∘ f5) s₁₋) (cong (inr12 ∘ f5) s₋₀) (cong (inr12 ∘ f5) s₋₁)
+sf5' = congSquare (inr12 ∘ f5) 2cell
+
 -- f1 : Square (sym yellowE) greenE (sym blueE) redE
 -- Square (inl (push (sym yellowE))) (inl (push greenE)) (inl (push (sym blueE))) (inl (push redE))
 sf1 : Square
@@ -182,7 +188,34 @@ sf1 : Square
         (cong inl12 (push greenE))
         (cong inl12 (sym (push blueE)))
         (cong inl12 (push redE))
-sf1 i j = {!i1 !} -- sf1' i j
+
+sf1 i j = {!!} -- sf1' i j
+
+sf3 : Square
+        {A = 2Sq}
+        {inl (inr blueV)}
+        {inl (inl whiteV)}
+        (cong inl12 (sym (push yellowE)))
+        {inl (inl whiteV)}
+        {inl (inr blueV)}
+        (cong inl12 (push blueE))
+        (cong inl12 (sym (push redE)))
+        (cong inl12 (push greenE))
+
+sf3 i j = {!!} -- sf3' i j
+
+sf5 : Square
+        {A = 2Sq}
+        {inl (inr blueV)}
+        {inl (inl whiteV)}
+        (cong inl12 (sym (push blueE)))
+        {inl (inl whiteV)}
+        {inl (inr blueV)}
+        (cong inl12 (push greenE))
+        (cong inl12 (sym (push redE)))
+        (cong inl12 (push yellowE))
+
+sf5 i j = {!!} -- sf5' i j
 
 sec2 : Hypercubic2 → 2Sq
 
@@ -197,13 +230,24 @@ sec2 (redE i) = inl (push redE i)
 sec2 (blueE i) = inl(push blueE i)
 
 {-Correspondance entre les remplissements des faces.
-Ici, on voudrait mettre des trucs de la forme inr(f1 (2cell i j))).
-Cependant, en regardant ce que demande les trous on voit que systématiquement 
-les sens des Red/Blue demandés sont inversés par rapport à ce qui est donné dans la déf de Hypercubic2?
-Ca c'est le soucis qui fait que ça passe pas encore, mais j'ai l'impression que c'est surmontable-}
+Ici, on voudrait mettre des trucs de la forme inr(f1 (2cell i j))).-}
+
 sec2 (f1 i j) = sf1 i j
-sec2 (f3 i j) = {!!}
-sec2 (f5 i j) = {!!}
+sec2 (f3 i j) = sf3 i j
+sec2 (f5 i j) = sf5 i j
+
+
+isIdsec2rec2 : section sec2 ret2 
+isIdsec2rec2 = {!   !}
+
+
+isIdrec2sec2 : retract sec2 ret2 
+isIdrec2sec2 = {!   !}
+
+2SqOk : Iso 2Sq Hypercubic2 
+2SqOk = iso ret2 sec2 isIdrec2sec2 isIdsec2rec2
+
+
 
 
 
