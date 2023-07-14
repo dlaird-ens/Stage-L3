@@ -176,6 +176,7 @@ sf3' = congSquare (inr12 ∘ f3) 2cell
 sf5' : Square (cong (inr12 ∘ f5) s₀₋) (cong (inr12 ∘ f5) s₁₋) (cong (inr12 ∘ f5) s₋₀) (cong (inr12 ∘ f5) s₋₁)
 sf5' = congSquare (inr12 ∘ f5) 2cell
 
+
 -- f1 : Square (sym yellowE) greenE (sym blueE) redE
 -- Square (inl (push (sym yellowE))) (inl (push greenE)) (inl (push (sym blueE))) (inl (push redE))
 sf1 : Square
@@ -224,10 +225,10 @@ sec2 blueV = inl(inr(blueV))
 sec2 whiteV = inl(inl(whiteV))
 
 {-Correspondance entre les arêtes-}
-sec2 (yellowE i) = inl(push yellowE i)
-sec2 (greenE i) = inl(push greenE i)
-sec2 (redE i) = inl (push redE i)
-sec2 (blueE i) = inl(push blueE i)
+sec2 (yellowE i) = cong inl12 (push yellowE) i
+sec2 (greenE i) = cong inl12 (push greenE) i
+sec2 (redE i) = cong inl12 (push redE) i
+sec2 (blueE i) = cong inl12 (push blueE) i
 
 {-Correspondance entre les remplissements des faces.
 Ici, on voudrait mettre des trucs de la forme inr(f1 (2cell i j))).-}
@@ -238,11 +239,61 @@ sec2 (f5 i j) = sf5 i j
 
 
 isIdsec2rec2 : section sec2 ret2 
-isIdsec2rec2 = {!   !}
+isIdsec2rec2 (inl (inl whiteV)) = refl
+isIdsec2rec2 (inl (inr blueV)) = refl
+isIdsec2rec2 (inl (push redE i)) = refl
+isIdsec2rec2 (inl (push blueE i)) = refl
+isIdsec2rec2 (inl (push greenE i)) = refl
+isIdsec2rec2 (inl (push yellowE i)) = refl
+isIdsec2rec2 (inr (f1 s₀₀)) = push (i1 c₀₀)
+isIdsec2rec2 (inr (f1 s₀₁)) = push (i1 c₀₁)
+isIdsec2rec2 (inr (f1 s₁₀)) = push (i1 c₁₀)
+isIdsec2rec2 (inr (f1 s₁₁)) = push (i1 c₁₁)
+isIdsec2rec2 (inr (f1 (s₀₋ i))) = push(i1 (c₀₋ i))
+isIdsec2rec2 (inr (f1 (s₁₋ i))) = push(i1 (c₁₋ i))
+isIdsec2rec2 (inr (f1 (s₋₀ i))) = push(i1 (c₋₀ i))
+isIdsec2rec2 (inr (f1 (s₋₁ i))) = push(i1 (c₋₁ i))
+isIdsec2rec2 (inr (f1 (2cell i j))) = {!   !}
+isIdsec2rec2 (inr (f3 s₀₀)) = push(i2 c₀₀)
+isIdsec2rec2 (inr (f3 s₀₁)) = push(i2 c₀₁)
+isIdsec2rec2 (inr (f3 s₁₀)) = push(i2 c₁₀)
+isIdsec2rec2 (inr (f3 s₁₁)) = push(i2 c₁₁)
+isIdsec2rec2 (inr (f3 (s₀₋ i))) = push(i2 (c₀₋ i))
+isIdsec2rec2 (inr (f3 (s₁₋ i))) = push(i2 (c₁₋ i))
+isIdsec2rec2 (inr (f3 (s₋₀ i))) = push(i2 (c₋₀ i))
+isIdsec2rec2 (inr (f3 (s₋₁ i))) = push(i2 (c₋₁ i))
+isIdsec2rec2 (inr (f3 (2cell i j))) = {!   !}
+isIdsec2rec2 (inr (f5 s₀₀)) = push(i3 c₀₀)
+isIdsec2rec2 (inr (f5 s₀₁)) = push(i3 c₀₁)
+isIdsec2rec2 (inr (f5 s₁₀)) = push(i3 c₁₀)
+isIdsec2rec2 (inr (f5 s₁₁)) = push(i3 c₁₁)
+isIdsec2rec2 (inr (f5 (s₀₋ i))) = push(i3 (c₀₋ i))
+isIdsec2rec2 (inr (f5 (s₁₋ i))) = push(i3 (c₁₋ i))
+isIdsec2rec2 (inr (f5 (s₋₀ i))) = push(i3 (c₋₀ i))
+isIdsec2rec2 (inr (f5 (s₋₁ i))) = push(i3 (c₋₁ i))
+isIdsec2rec2 (inr (f5 (2cell i j))) = {!   !}
+isIdsec2rec2 (push (i1 c₀₀) i) = {!!}
+isIdsec2rec2 (push (i1 c₀₁) i) = {!   !}
+isIdsec2rec2 (push (i1 c₁₀) i) = {!   !}
+isIdsec2rec2 (push (i1 c₁₁) i) = {!   !}
+isIdsec2rec2 (push (i1 (c₀₋ i)) j) = {!   !}
+isIdsec2rec2 (push (i1 (c₁₋ i)) j) = {!   !}
+isIdsec2rec2 (push (i1 (c₋₀ i)) j) = {!   !}
+isIdsec2rec2 (push (i1 (c₋₁ i)) j) = {!   !}
+isIdsec2rec2 (push (i2 x) i) = {!   !}
+isIdsec2rec2 (push (i3 x) i) = {!   !}
 
 
 isIdrec2sec2 : retract sec2 ret2 
-isIdrec2sec2 = {!   !}
+isIdrec2sec2 blueV = refl
+isIdrec2sec2 whiteV = refl
+isIdrec2sec2 (yellowE i) = refl
+isIdrec2sec2 (greenE i) = refl
+isIdrec2sec2 (redE i) = refl
+isIdrec2sec2 (blueE i) = refl
+isIdrec2sec2 (f1 i j) = {!!}
+isIdrec2sec2 (f3 i j) = {!   !}
+isIdrec2sec2 (f5 i j) = {!   !}
 
 2SqOk : Iso 2Sq Hypercubic2 
 2SqOk = iso ret2 sec2 isIdrec2sec2 isIdsec2rec2
