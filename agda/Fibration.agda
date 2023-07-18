@@ -414,4 +414,8 @@ HypercubicToDelooping ∣ 3-cell i j k ∣₃ = {!   !}
 HypercubicToDelooping (squash₃ x x₁ p q r s i i₁ i₂) = {!   !}
 
 
- 
+Trunc : Hypercubic → ∥ Hypercubic ∥₃
+Trunc x = ∣ x ∣₃
+
+HypercubicPushoutToDelooping : HypercubicPushout → DeloopingQuaternions
+HypercubicPushoutToDelooping = HypercubicToDelooping ∘ Trunc ∘ HypercubicPushoutToHypercubic  
