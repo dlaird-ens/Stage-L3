@@ -18,6 +18,8 @@ open import Cubical.Homotopy.EilenbergMacLane.Properties
 open import Cubical.Algebra.Group.Base
 open import Cubical.Algebra.Group.Properties
 open import QuaternionGroup renaming (e to Qe; i to Qi; j to Qj; k to Qk; -e to Q-e; -i to Q-i; -j to Q-j; -k to Q-k)
+open import Cubical.HITs.GroupoidTruncation.Base
+
 
 private
   variable
@@ -398,16 +400,18 @@ HypercubicPushoutToHypercubic (push (a₋₋₁ i j) k) = (rot f5) i j
 DeloopingQuaternions = EM₁ QuaternionGroup
 
 
-HypercubicToDelooping : Hypercubic → DeloopingQuaternions
-HypercubicToDelooping blueV = embase
-HypercubicToDelooping whiteV = embase
-HypercubicToDelooping (yellowE x) = embase
-HypercubicToDelooping (greenE x) = emloop Qj x
-HypercubicToDelooping (redE x) = sym (emloop Qk) x
-HypercubicToDelooping (blueE x) = sym (emloop Q-i) x
-HypercubicToDelooping (f1 x y) = {! !}
-HypercubicToDelooping (f3 x y) = {!   !}
-HypercubicToDelooping (f5 x y) = {!   !}
-HypercubicToDelooping (3-cell x y z) = {!   !} 
+HypercubicToDelooping : ∥ Hypercubic ∥₃ → DeloopingQuaternions
+HypercubicToDelooping ∣ blueV ∣₃ = embase
+HypercubicToDelooping ∣ whiteV ∣₃ = embase
+HypercubicToDelooping ∣ yellowE i ∣₃ = embase
+HypercubicToDelooping ∣ greenE i ∣₃ = emloop Qj i
+HypercubicToDelooping ∣ redE i ∣₃ = sym (emloop Qk) i
+HypercubicToDelooping ∣ blueE i ∣₃ = sym (emloop Q-i) i
+HypercubicToDelooping ∣ f1 i j ∣₃ = {!   !}
+HypercubicToDelooping ∣ f3 i j ∣₃ = {!   !}
+HypercubicToDelooping ∣ f5 i j ∣₃ = {!   !}
+HypercubicToDelooping ∣ 3-cell i j k ∣₃ = {!   !}
+HypercubicToDelooping (squash₃ x x₁ p q r s i i₁ i₂) = {!   !}
+
 
  
