@@ -1,4 +1,5 @@
 {-# OPTIONS --cubical #-}
+{-# OPTIONS --allow-unsolved-metas #-}
  
 open import HiTs
 open import 1Skeleton
@@ -55,11 +56,6 @@ g (i3 (c₋₁ i)) = f5
 
 2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
 
-
-
-
-
-
 isContrSquare :
   {ℓ : Level} {A : Type ℓ}
   {a₀₀ a₀₁ : A} {a₀₋ : a₀₀ ≡ a₀₁}
@@ -69,9 +65,6 @@ isContrSquare :
   -- → isContr s
   (i j : I) → a₀₀ ≡ s i j
 isContrSquare {a₀₀ = a₀₀} s i j k = s (i ∧ k) (j ∧ k)
-
-
-
 
 ret2 : 2Sq → Hypercubic2
 
@@ -93,13 +86,13 @@ ret2 (push (i1 c₀₀) i) = blueV
 ret2 (push (i1 c₀₁) i) = yellowE i
 ret2 (push (i1 c₁₀) i) = blueE i
 ret2 (push (i1 c₁₁) i) =  (sym blueE ∙ greenE ) i
-ret2 (push (i1 (c₀₋ i)) j) = {!!} {- yellowE ((~ i) ∨ j)-}
+ret2 (push (i1 (c₀₋ i)) j) = {!!}  yellowE ((~ i) ∨ j)
 ret2 (push (i1 (c₁₋ i)) j) = {!!}
 ret2 (push (i1 (c₋₀ i)) j) = {!!}
 ret2 (push (i1 (c₋₁ i)) j) = {!!}
-ret2 (push (i2 c₀₀) i) = {!!}
-ret2 (push (i2 c₀₁) i) = {!!}
-ret2 (push (i2 c₁₀) i) = {!!}
+ret2 (push (i2 c₀₀) i) = blueV
+ret2 (push (i2 c₀₁) i) = yellowE i
+ret2 (push (i2 c₁₀) i) = redE i
 ret2 (push (i2 c₁₁) i) = {!!}
 ret2 (push (i2 (c₀₋ ₁)) j) = {!   !}
 ret2 (push (i2 (c₁₋ i)) j) = {!   !}

@@ -1,7 +1,10 @@
 {-# OPTIONS --cubical #-}
+{-# OPTIONS --allow-unsolved-metas #-}
+
 open import HiTs
 open import 1Skeleton
 open import 2SkeletonBase
+open import 2Skeleton 
 open import Cubical.Foundations.Function
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Path
@@ -17,61 +20,8 @@ private
     x y z : A
     a₀₀ a₀₁ a₁₀ a₁₁ : A
     b₀₀ b₀₁ b₁₀ b₁₁ : A 
-data side : Type where 
-{-Le type d'une face à savoir 4 sommets, 4 arêtes et une preuve que c'est une face, même convention que pour les Square-}
-  s₀₀ : side
-  s₀₁ : side
-  s₁₀ : side
-  s₁₁  : side 
-  s₀₋ : s₀₀ ≡ s₀₁
-  s₁₋ : s₁₀ ≡ s₁₁ 
-  s₋₀ : s₀₀ ≡ s₁₀
-  s₋₁ : s₀₁ ≡ s₁₁
-  2cell : Square s₀₋ s₁₋ s₋₀ s₋₁
-
-data sides : Type where 
-  f1 : side → sides 
-  f3 : side → sides 
-  f5 : side → sides
-
-g : (triple Circle Circle Circle) → sides 
-
-{-La première face, qui doit correspondre à la face latérale gauche de la variété hypercubique, i.e f1 -}
-g (i1 c₀₀) = f1 s₀₀
-g (i1 c₀₁) = f1 s₀₁
-g (i1 c₁₀) = f1 s₁₀
-g (i1 c₁₁) = f1 s₁₁
-g (i1 (c₀₋ i)) = f1 (s₀₋ i)
-g (i1 (c₁₋ i)) = f1 (s₁₋ i)
-g (i1 (c₋₀ i)) = f1 (s₋₀ i)
-g (i1 (c₋₁ i)) = f1 (s₋₁ i)
-
-
-{-La deuxième face qui doit correspondre à la face du bas de la variété hypercubique, i.e f3 -}
-g (i2 c₀₀) = f3 s₀₀
-g (i2 c₀₁) = f3 s₀₁
-g (i2 c₁₀) = f3 s₁₀
-g (i2 c₁₁) = f3 s₁₁
-g (i2 (c₀₋ i)) = f3 (s₀₋ i)
-g (i2 (c₁₋ i)) = f3 (s₁₋ i)
-g (i2 (c₋₀ i)) = f3 (s₋₀ i)
-g (i2 (c₋₁ i)) = f3 (s₋₁ i)
-
-
-{-La troisième face, qui doit correspondre à la face de devant de la variété hypercubique, i.e f5 -}
-g (i3 c₀₀) = f5 s₀₀
-g (i3 c₀₁) = f5 s₀₁
-g (i3 c₁₀) = f5 s₁₀
-g (i3 c₁₁) = f5 s₁₁
-g (i3 (c₀₋ i)) = f5 (s₀₋ i)
-g (i3 (c₁₋ i)) = f5 (s₁₋ i)
-g (i3 (c₋₀ i)) = f5 (s₋₀ i)
-g (i3 (c₋₁ i)) = f5 (s₋₁ i)
-
-2Sq = Pushout {A = (triple Circle Circle Circle)} {B = 1Sq} {C = sides} f g
 
 {-Dernier Pushout-}
-
 
 data CubeBoundary : Type where
   a₀₀₀ : CubeBoundary
@@ -177,71 +127,7 @@ k (a₋₁₋ i j) = x₋₁₋ i j
 k (a₋₋₀ i j) = x₋₋₀ i j
 k (a₋₋₁ i j) = x₋₋₁ i j
 
-inl12 : 1Sq → 2Sq
-inl12 = inl
 
-inr12 : sides → 2Sq
-inr12 = inr
-
-push12 : (x : triple Circle Circle Circle) → inl12 (f x) ≡ inr12 (g x)
-push12 = push
-
-congSquare :
-  {A : Type ℓ} {B : Type ℓ'}
-  {a₀₀ a₀₁ : A} {a₀₋ : a₀₀ ≡ a₀₁}
-  {a₁₀ a₁₁ : A} {a₁₋ : a₁₀ ≡ a₁₁}
-  {a₋₀ : a₀₀ ≡ a₁₀} {a₋₁ : a₀₁ ≡ a₁₁}
-  (f : A → B) →
-  Square a₀₋ a₁₋ a₋₀ a₋₁ → Square (cong f a₀₋) (cong f a₁₋) (cong f a₋₀) (cong f a₋₁)
-congSquare f s i j = f (s i j)
-
-sf1' : Square (cong (inr12 ∘ f1) s₀₋) (cong (inr12 ∘ f1) s₁₋) (cong (inr12 ∘ f1) s₋₀) (cong (inr12 ∘ f1) s₋₁)
-sf1' = congSquare (inr12 ∘ f1) 2cell
-
-sf3' : Square (cong (inr12 ∘ f3) s₀₋) (cong (inr12 ∘ f3) s₁₋) (cong (inr12 ∘ f3) s₋₀) (cong (inr12 ∘ f3) s₋₁)
-sf3' = congSquare (inr12 ∘ f3) 2cell
-
-sf5' : Square (cong (inr12 ∘ f5) s₀₋) (cong (inr12 ∘ f5) s₁₋) (cong (inr12 ∘ f5) s₋₀) (cong (inr12 ∘ f5) s₋₁)
-sf5' = congSquare (inr12 ∘ f5) 2cell
-
-sf1 : Square
-        {A = 2Sq}
-        {inl (inr blueV)}
-        {inl (inl whiteV)}
-        (cong inl12 (sym (push yellowE)))
-        {inl (inl whiteV)}
-        {inl (inr blueV)}
-        (cong inl12 (push greenE))
-        (cong inl12 (sym (push blueE)))
-        (cong inl12 (push redE))
-
-sf1 i j = {!!} -- sf1' i j
-
-sf3 : Square
-        {A = 2Sq}
-        {inl (inr blueV)}
-        {inl (inl whiteV)}
-        (cong inl12 (sym (push yellowE)))
-        {inl (inl whiteV)}
-        {inl (inr blueV)}
-        (cong inl12 (push blueE))
-        (cong inl12 (sym (push redE)))
-        (cong inl12 (push greenE))
-
-sf3 i j = {!!} -- sf3' i j
-
-sf5 : Square
-        {A = 2Sq}
-        {inl (inr blueV)}
-        {inl (inl whiteV)}
-        (cong inl12 (sym (push blueE)))
-        {inl (inl whiteV)}
-        {inl (inr blueV)}
-        (cong inl12 (push greenE))
-        (cong inl12 (sym (push redE)))
-        (cong inl12 (push yellowE))
-
-sf5 i j = {!!} -- sf5' i j
 
 h : CubeBoundary → 2Sq
 h a₀₀₀ = inl(inr(blueV))
@@ -426,12 +312,12 @@ ret3 (push (a₋₀₀ i) j) = sym redE i
 ret3 (push (a₋₀₁ i) j) = greenE i
 ret3 (push (a₋₁₀ i) j) = yellowE i
 ret3 (push (a₋₁₁ i) j) = (sym blueE) i
-ret3 (push (a₀₋₋ i j) k) = f1 i j
-ret3 (push (a₁₋₋ i j) k) = (rot f1) i j
-ret3 (push (a₋₀₋ i j) k) = f3 i j
-ret3 (push (a₋₁₋ i j) k) = (anti-rot f3) i j
-ret3 (push (a₋₋₀ i j) k) = f5 i j
-ret3 (push (a₋₋₁ i j) k) = (rot f5) i j
+ret3 (push (a₀₋₋ i j) k) = {!!}
+ret3 (push (a₁₋₋ i j) k) = {!!}
+ret3 (push (a₋₀₋ i j) k) = {!!}
+ret3 (push (a₋₁₋ i j) k) = {!!}
+ret3 (push (a₋₋₀ i j) k) = {!!}
+ret3 (push (a₋₋₁ i j) k) = {!!}
 
 isIdsec3rec3 : section sec3 ret3 
 isIdsec3rec3 (inl (inl (inl whiteV))) = refl
@@ -544,4 +430,4 @@ isIdrec3sec3 (f5 i j) = {!   !}
 isIdrec3sec3 (3-cell i j k) = {!   !}
 
 3SqOk : Iso 3Sq Hypercubic 
-3SqOk = iso ret3 sec3 isIdrec3sec3 isIdsec3rec3 
+3SqOk = iso ret3 sec3 isIdrec3sec3 isIdsec3rec3

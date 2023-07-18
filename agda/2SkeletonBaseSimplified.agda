@@ -1,4 +1,5 @@
 {-# OPTIONS --cubical #-}
+{-# OPTIONS --allow-unsolved-metas #-}
 open import HiTs
 open import 1Skeleton
 open import Cubical.Foundations.Prelude

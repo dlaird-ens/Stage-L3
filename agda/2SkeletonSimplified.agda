@@ -1,4 +1,5 @@
 {-# OPTIONS --cubical #-}
+{-# OPTIONS --allow-unsolved-metas #-}
 open import HiTs
 open import 1Skeleton
 open import Cubical.Foundations.Prelude
@@ -275,4 +276,4 @@ isIdrec2sec2 (f3 i j) = {!   !}
 isIdrec2sec2 (f5 i j) = {!   !}
 
 2SqOk : Iso 2Sq Hypercubic2 
-2SqOk = iso ret2 sec2 isIdrec2sec2 isIdsec2rec2
+2SqOk = iso ret2 sec2 isIdrec2sec2 isIdsec2rec2 

@@ -1,4 +1,6 @@
 {-# OPTIONS --cubical #-}
+{-# OPTIONS --allow-unsolved-metas #-}
+
 open import HiTs
 open import 1Skeleton
 open import Cubical.Foundations.Prelude
@@ -189,8 +191,7 @@ sf1 : Square
         (cong inl12 (push greenE))
         (cong inl12 (sym (push blueE)))
         (cong inl12 (push redE))
-
-sf1 i j = {!!} -- sf1' i j
+sf1 i j = {!!}
 
 sf3 : Square
         {A = 2Sq}
@@ -312,3 +313,4 @@ isIdrec2sec2 (f5 i j) = {!   !}
 
 
 
+ 
