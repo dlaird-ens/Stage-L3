@@ -2,14 +2,12 @@
 
 open import Cubical.Foundations.Function
 open import Cubical.Foundations.Prelude
-open import Cubical.Foundations.Path
+open import Cubical.Foundations.HLevels
+open import Cubical.Data.Prod.Base
 open import Cubical.Algebra.Group.Base
 open import Cubical.Algebra.Group.Properties
-open import Cubical.Data.Fin.Base
-open import Cubical.Data.Nat using (ℕ ; zero ; suc ; _+_ ; znots)
-open import Cubical.Data.Nat.Order
-open import Cubical.Data.Nat.Order.Recursive using () renaming (_≤_ to _≤′_)
-open import Cubical.Data.Sigma
+open import Cubical.Data.Bool.Base
+open import Cubical.Data.Bool.Properties
 
 data Quaternion : Type where
     e : Quaternion
@@ -85,18 +83,43 @@ mult -k -j = mult k j
 mult -k -k = -e
 
 
-QuaternionToIntegers : Quaternion → Fin 8
-QuaternionToIntegers e = 0 , (7 , refl)
-QuaternionToIntegers i = 1 , (6 , refl)
-QuaternionToIntegers j = 2 , (5 , refl)
-QuaternionToIntegers k = 3 , (4 , refl)
-QuaternionToIntegers -e = 4 , (3 , refl)
-QuaternionToIntegers -i = 5 , (2 , refl)
-QuaternionToIntegers -j = 6 , (1 , refl)
-QuaternionToIntegers -k = 7 , (0 , refl)
+QuaternionsToSet : Quaternion → (Bool × Bool × Bool)
+QuaternionsToSet e = false , (false , false)
+QuaternionsToSet i = false , (false , true)
+QuaternionsToSet j = false , (true , false)
+QuaternionsToSet k = false , (true , true)
+QuaternionsToSet -e = true , (false , false)
+QuaternionsToSet -i = true , (false , true)
+QuaternionsToSet -j = true , (true , false)
+QuaternionsToSet -k = true , (true , true)
+
+SetToQuaternions : (Bool × Bool × Bool) → Quaternion 
+SetToQuaternions (false , (false , false)) = e
+SetToQuaternions (false , (false , true)) = i
+SetToQuaternions (false , (true , false)) = j
+SetToQuaternions (false , (true , true)) = k
+SetToQuaternions (true , (false , false)) = -e
+SetToQuaternions (true , (false , true)) = -i
+SetToQuaternions (true , (true , false)) = -j
+SetToQuaternions (true , (true , true)) = -k
 
 
-postulate isSetQuaternion : isSet Quaternion 
+postulate isSetBool×Bool×Bool : isSet (Bool × Bool × Bool)
+
+
+embed : (x : Quaternion) → (SetToQuaternions (QuaternionsToSet x) ≡ x)
+embed e = refl
+embed i = refl
+embed j = refl
+embed k = refl
+embed -e = refl
+embed -i = refl
+embed -j = refl
+embed -k = refl
+
+isSetQuaternion : isSet Quaternion 
+isSetQuaternion = isSetRetract {B = (Bool × Bool × Bool)} QuaternionsToSet SetToQuaternions embed isSetBool×Bool×Bool
+
 
 inv : Quaternion → Quaternion
 inv e = e
