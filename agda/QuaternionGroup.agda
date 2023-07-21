@@ -611,4 +611,4 @@ InvL -j = refl
 InvL -k = refl
 
 QuaternionGroup = makeGroup {G = Quaternion} e mult inv isSetQuaternion assoc IdR IdL InvR InvL
- 
+  

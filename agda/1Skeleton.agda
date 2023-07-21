@@ -39,25 +39,25 @@ data edges : Type where
   greenE : edges
   yellowE : edges
 
-data Vertice1 : Type where
-  whiteV : Vertice1
+data WhiteVertice : Type where
+  whiteV : WhiteVertice
 
-data Vertice2 : Type where 
-  blueV : Vertice2
+data BlueVertice : Type where 
+  blueV : BlueVertice
 
-source : edges → Vertice1
+source : edges → WhiteVertice
 source redE = whiteV
 source blueE = whiteV
 source greenE = whiteV
 source yellowE = whiteV
 
-target : edges →  Vertice2 
+target : edges →  BlueVertice 
 target redE = blueV
 target blueE = blueV
 target greenE = blueV
 target yellowE = blueV
 
-1Sq = Pushout {A = edges} {B = Vertice1} {C = Vertice2} source target 
+1Sq = Pushout {A = edges} {B = WhiteVertice} {C = BlueVertice} source target 
 
 data Hypercubic1 : Type where 
     blueV : Hypercubic1
@@ -103,3 +103,13 @@ isIdrec1sec1 (blueE i) = refl
 
 1SqOk : Iso 1Sq Hypercubic1 
 1SqOk = iso ret1 sec1 isIdrec1sec1 isIdsec1rec1
+
+
+inl01 : WhiteVertice → 1Sq
+inl01 = inl
+
+inr01 : BlueVertice → 1Sq
+inr01 = inr 
+
+push01 : (e : edges) →  inl01 (source e) ≡  inr01 (target e) 
+push01 = push
