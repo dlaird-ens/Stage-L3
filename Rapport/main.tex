@@ -28,6 +28,7 @@
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{tikz-cd}
+\usetikzlibrary{patterns.meta}
 \usepackage{hyperref}
 \geometry{hmargin=2.5cm,vmargin=3cm,lmargin=1.75cm,rmargin=1.75cm}
 \pagestyle{fancy}
@@ -338,19 +339,12 @@ The particular case where types behave like sets, as it is for the type of natur
 \begin{figure}[h]
   \centering
   \begin{tikzpicture}
-  \draw plot [samples = 200] ({4*sin(\x r)} , {1.5*cos(\x r)});
-  \node (A) at (-2.5,-0.1) [below] {$x$};
-  \draw (-2.5,0) node {$\bullet$};
-  \node (B) at (2.5,-0.1) [below] {$y$};
-  \draw (2.5,0) node {$\bullet$};
-  \fill[color = gray!20] (-2.5,0) arc (135:45:3.55) arc (-45:-135:3.55);
-  \draw[->, >=latex] (-2.5,0) arc (135:45:3.55);
-  \draw[->, >=latex] (-2.5,0) arc (-135:-45:3.55);
-  \node (C) at (0,1) [above] {$p$};
-  \node (D) at (0,-1) [below] {$q$};
-  \draw[->, >=latex,double] (0,1) -- (0,-1);
-  \node (E) at (0,0) [right]{$r$};
-  \node (F) at (-4.5,0.7) [below, right]{$A$};
+    \draw (0,0) ellipse (3.5cm and 2cm);
+    \filldraw (-2.5,0) circle (1.5pt) node [below left] {$x$};
+    \filldraw (2.5,0) circle (1.5pt) node [below right] {$y$};
+    \filldraw [pattern={Lines[angle=60, distance=8pt]}] (-2.5,0) .. controls (-1,1.5) and (1,1.5) .. (2.5,0) .. controls (1,-1.5) and (-1,-1.5) .. (-2.5,0) -- cycle;
+    \draw [thick, double] (0,1.152) -- (0,-1.152) node [at start, above] {$p$} node [midway, right] {$r$} node [at end, below] {$q$};
+    \node (A) at (3.3,1.5) {$A$};
   \end{tikzpicture}
   \caption{a type $A$ with points $x,y : A$, two paths $p,q: x=_A y$ and a homotopy $r : p =_{x=_A y} q$}
 \end{figure}
