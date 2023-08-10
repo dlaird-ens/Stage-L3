@@ -468,7 +468,7 @@ The induction principle is already complicated for the circle since it requires 
   It's a set if :
   $$\mathrm{isSet}\hspace{3pt}A :\equiv \prod_{a;b : A} \prod_{p,q : a=b} (p= q)\text{  holds.}$$ 
 \end{mydef}
-It appears that $A$ is a set if and only if for any $a,b :A$ we have $\mathrm{isProp}\hspace{3pt} A$. We also see that sets are defined to be the discrete spaces since there are no trivial paths in a set. One can define a hierarchy of $n$-types for $n\geq -1$ by induction on $n$ (the definition follows the same lines as the previous one) with $(-1)$-types being propositions.
+It appears that $A$ is a set if and only if for any $a,b :A$ we have $\mathrm{isProp}\hspace{3pt} (a=_A b)$. We also see that sets are defined to be the discrete spaces since there are no trivial paths in a set. One can define a hierarchy of $n$-types for $n\geq -1$ by induction on $n$ (the definition follows the same lines as the previous one) with $(-1)$-types being propositions.
 \begin{itemize}
   \item \textbf{Truncations} : Given a type $A$, one can build its propositional truncation $||A||_{-1}$ with the following HIT:
     \begin{itemize}
