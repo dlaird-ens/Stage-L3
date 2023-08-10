@@ -150,17 +150,12 @@
 \end{figure}
 \vfill % Fill the rest of the page with whitespace
 \end{titlepage}
-
 \tableofcontents
-\newpage
-\chapter{Introduction}
-\textbf{Homotopy Type Theory} (which I will often refer to as \textbf{HoTT} in this report) is a new field in mathematics and computer science, at the crossroad of \textbf{Type Theory}, \textbf{Homotopy Theory}, \textbf{Category Theory} and the \textbf{Foundations of Mathematics}. It is based upon \textbf{Martin-Löf's Type Theory}, with the addition of the \textbf{Univalence Axiom} and \textbf{Higher Inductive Types} which allow one to give a homotopical interpretation of type theory, and thus doing homotopy theory within the synthetic framework of type theory.\\\\
-The \textbf{Hypercubic Manifold} is a topological manifold first introduced by \textbf{Henri Poincaré}, as one of many examples of adjunction spaces of polyhedrons. One of its main properties is that its \textbf{fundamental group} is the \textbf{Quaternion group}.
-\\\\
-Last but not least, HoTT has given rise to new foundations for Mathematics, namely the \textbf{Univalent Foundations}, which someday may become the foundation system for the mathematics done by every mathematician. HoTT allows one to proceed with \textbf{proof relevant} and \textbf{constructive} mathematics, that differ intrisically from classical mathematic in that proving a statement requires to build some terms from type forming rules. This, and more precisely the \textbf{Curry-Howard} isomorphism, is what allows to use proof assistants such as \textsc{Agda} or \textsc{Coq} to compute within Intuitionistic Type Theory. In the case of HoTT, a constructive interpretation of the Univalence Axiom was given with \textbf{cubical type theory}, which slightly differs from classical HoTT but allows to compute using the Univalence Axiom, for instance with the \textsc{cubical Agda} package.\\\\
-The goal of this internship was to prove some results about the Hypercubic Manifold within  HoTT and Cubical Type Theory using the agda proof assistant, and further extending the definition of this Manifold. An essential observation is that the combinatorial nature of the Hypercubic Manifold is quite rich, making the use of a proof assistant crucial to both produce and check any proof.\\\\
-Let's elaborate a bit on how this report is built. Sections $2$ to $6$
-\newpage
+\section{Introduction}
+\textbf{Homotopy Type Theory} (which I will often refer to as \textbf{HoTT} in this report) is a new field in mathematics and computer science, at the crossroad of \textbf{Type Theory}, \textbf{Homotopy Theory} and the \textbf{Foundations of Mathematics}. It is based upon a homotopical interpretation of \textbf{Martin-Löf's Type Theory}, with the addition of the \textbf{Univalence Axiom} and \textbf{Higher Inductive Types}, that allow one to proceed with univalent mathematics and doing homotopy theory within the synthetic framework of type theory.\\
+The univalence axiom roughly states that equal types are precisely equivalent types (this will be made clearer later on). However, as it is often the case with type theory, we are interested in the computability of our system, and it appears that the univalence axiom does note compute. This is one of the motivation for the introduction of \textbf{Cubical type theory}, that gives a constructive interpretation of the univalence axiom.\\
+The goal of this internship was to give a definition of the \textbf{hypercubic manifold} in HoTT/cubical type theory using the agda proof assistant and the cubical agda library \cite{cubicalagda} and to prove some further results about it. The hypercubic manifold \cite{hypercubic} is obtained as an adjunction space of a 3-dimensional hypercube. As shown in \cite{hypercubic}, it is obtained by gluing opposite faces of a cube with a quarter turn each time.\\
+Homotopy type theory being a very atypical theory, it comes with a lot of new definitions, ideas and concepts. This makes it hard to summarize both the basic theory needed for the internship (roughly speaking, chapters 1,2,3,4,6,8 of the \textbf{HoTT Book} \cite{hott}) as well as the content of the internship itself in 20 pages. For that reason, this report will feature an important work of summarization of both basic and more advanced topics in HoTT (however many details and important results will be overlooked due to the little space), and the work I did myself during the internship might not take up the most important chunk of space in this report. All the formalized results, and attempts, obtained during the internship can be found on this github repository. This report wil be divided into 2 sections, the first one introducing the required HoTT concepts, and the second one tackling what was made during the internship.
 \chapter{Pre-requesites}
 The following part is aimed at giving a sufficent background for one to be atble understand the material from the internship. The presentation is very much inspired from the \textbf{HoTT Book} \cite{hott}. We assume basic knowledge about Type systems and the Curry-Howard isomorphism. We will work in the informal type theory style which is the usual way of proceeding for our purpose.
 \begin{comment}
@@ -228,7 +223,7 @@ In type theory, all that we manipulate are \textbf{types} $A,B$ and \textbf{term
     \item $0 : \mathbb N$
     \item $\mathrm{suc}: \mathbb N \rightarrow \mathbb N$
 \end{itemize}
-The type of natural integers also comes with its infamous \textbf{induction principle}, which says that to prove a predicate over \(\mathbb{N}\) one has to prove it for $0$ and that it is preserved by $\mathrm{suc}$. In type theory, since all we work with are types, we will also have induction principles that come along any type we define.\\
+The type of natural integers also comes with an \textbf{induction principle}, which states that to prove a predicate over \(\mathbb{N}\) one has to prove it for $0$ and that it is preserved by $\mathrm{suc}$. In type theory, since all we work with are types, we will also have induction principles that come along any type we define.\\
 It is to be noted that \textbf{equality} plays a central role in Type Theory. We distinguish two kind of equalities, \textbf{definitional equality}, which we will note $\equiv$, it isn't an actual part of Type Theory but lives at the same level as judgements "$a : A $". For example, setting $f$ to be the function $x \mapsto x^2 $ (say over the integers), for any integer $a$ we would then have $f a \equiv a^2$, which is to be read as "$f a$ is definitionnaly equal to $a^2$".\\
 It must not be mistaken with \textbf{(propositional) equality} which we will take a closer look at later on. For now, let's just recall that in Type Theory every object is a type and so, for two elements $a,b :A$ we can build the type $a =_A b$, namely the \textbf{identity type} of $a$ and $b$, and to prove that $a$ and $b$ are equal elements (of $A$), one has to produce an element $p : a=_A b$.\\
 
@@ -242,7 +237,7 @@ We may also use standard notations from mathematics or $\lambda$-calculus depend
 To introduce types more formally, we need to talk about \textbf{universes}, which, as in set theory, allow us to avoid unsoundness problems (such as Russel paradox). Details need not concern us here, let's just get straight to the point: we suppose that we have a \textbf{cumulative hierarchy} of universes $\mathcal{U}_i$, and elements of such a universe are themselves some type. Hence, giving ourselves a type $A$ is tantamount to giving ourselves an element from some universe $\mathcal{U}$ (we will not mention the level from now on).\\
  Universes allow us to introduce \textbf{Type familes}, that is, a type family over a type $A$ is a function of type $A \to \mathcal{U}$. Type families will play an increasingly important role in our Type Theory and afterwards in the homotopical interpretation.\\
  \paragraph{Dependent function types ($\Pi$-types)}
- For now, let's note that we can talk about \textbf{dependant functions}. Given a type $A$ and a type family $C: A \rightarrow \mathcal{U}$, one can build the type of dependent functions over $A$, whose codomain can vary along $C$: 
+ For now, let's note that we can talk about \textbf{dependent functions}. Given a type $A$ and a type family $C: A \rightarrow \mathcal{U}$, one can build the type of dependent functions over $A$, whose codomain can vary along $C$: 
 $$\prod_{x : A} C(x)$$
 The formation rule is the same as before, one can build an element $f$ of type $\prod_{x : A} C(x)$ with an expression $\Phi(x)$ such that $a : A \vdash \Phi(a) : C(a)$ and by setting $f(x) :\equiv \Phi(x)$.
 \subsection{Product types}
@@ -270,8 +265,7 @@ $$\sum_{x : A} B(x)$$
 To form an element of such a type, one needs elements $a : A$ and $b : B(a)$, resulting in an element $(a,b) : \sum_{x : A} B(x)$. It should be noted that theses types are a generalization of product types and that for the constant type family at $B$, $C :\equiv \lambda (x : A).B$ we have $\sum_{x = A} C(x)\equiv A \times B$.\\
 As for product types, one can define dependent and non dependent functions $f$ over the type $\sum_{x : A} B(x)$ by specifiying its values on dependant pairs $(a,b)$ where $b:B(a)$.\\ 
 The recursion principle allows us to define (again) the first projection $\mathrm{pr}_1 : \sum_{x : A} B(x) \rightarrow A$ by $\mathrm{pr}_1 (a,b) :\equiv a$.\\
-However, defining the second projection is now a bit trickier since it should have the type $\prod_{p : \sum_{x : A} B(x)} \mathrm{pr}_1(p)$, making it a dependent function. It thus requires the use of the induction principle, and we can define it by its values on dependant pairs by $\mathrm{pr}_2(a,b) :\equiv b$.\\
-$\Sigma$-types will play a crucial role later on when we'll be looking at homotopy type theory.
+However, defining the second projection is now a bit trickier since it should have the type $\prod_{p : \sum_{x : A} B(x)} \mathrm{pr}_1(p)$, making it a dependent function. It thus requires the use of the induction principle, and we can define it by its values on dependant pairs by $\mathrm{pr}_2(a,b) :\equiv b$.
 \subsection{Coproduct types}
 Given types $A$ and $B$, one can define their coproduct type:
 \paragraph{Type : $A+B$}
@@ -298,8 +292,21 @@ We will be looking at Type Theory in details in the next section, for now let's 
 This correspondence shows the similarity in between type forming rules and rules of propositional logic when seeing "propositions as types" and vice versa. \\
 For instance, if one wants to build a term of type $A \times B$, one needs a term $a : A$ and a term $b : B$ to form $(a,b) : A \times B$. Similarly, to prove the proposition $A \land B$, one needs a proof of $A$ and a proof of $B$. \\
 In the same way, building a function $f : A \rightarrow B$ (or a proof of $A \implies B)$ requires to be able to build an element of $B$ (a proof of $B$) given an element an $A$ (given a proof of $A$).\\
-This correspondence is much richer than the minimal version given above, but hopefully this should suffice to show the deep interconnection.\\
-Under this correspondence, it makes sense to talk about a predicate over a type $A$ for a type family $P : A \rightarrow \mathcal{U}$.
+Under this correspondence, it also makes sense to talk about a predicate over a type $A$ for a type family $P : A \rightarrow \mathcal{U}$. Then, for $a :A$ the type $P(a)$ corresponds to the propositions "$P$ holds for $a$". We then have the following correspondance : 
+\begin{center}
+  \begin{tabular}{|c|c|}
+  \hline Types & Logic  \\
+  \hline$\prod_{x : A} P(x)$ & For all $x :A$, $P(x)$ holds  \\
+  \hline$\sum_{x : A} P(x)$ & There exists $x : A$ such that $P(x)$ holds\\
+  \hline
+  \end{tabular}
+\end{center} 
+One can also think of the type $\sum_{x: a} P(x)$ as the type of all $x : A$ such that $P(x)$ holds.
+\paragraph{Semi-groups}
+Let's illustrate how our type formers and the proposition as types interpretation allows us to define some mathematical structure. We call a \textbf{semigroup} a type $A$ equipped with an associative binary operation $m : A \times A \rightarrow A$. Under the proposition as types interpretation, the proposition that $m$ is associative is described by the following type : 
+$$\mathrm{isAssoc}(m) : \prod_{x,y,z : A }m(x,m(y,z))=m(m(x,y),z)$$
+Then, a semigroup structure is given by a type $A$, a binary operation $m$ over $A$ and a proof that $m$ is associative, and so we can the define the type of semigroups over a universe $\mathcal{U}$ by : 
+$$\mathrm{SemiGroup} :\equiv \sum_{A : \mathcal{U}} \sum_{m : A \times A \rightarrow A} \mathrm{isAssoc}(m)$$
 \subsection{Identity types family}
 For a type $A: \mathcal{U}$ we have a type family $\mathrm{Id} : A \rightarrow A \rightarrow \mathcal{U}$ (we will write $x=y$ for $\mathrm{Id}_A(x)(y)$ if the context is clear) and a dependent function called reflexivity:
 $$\mathrm{refl} : \prod_{x : A} (x=x)$$
@@ -323,8 +330,9 @@ A \textbf{homotopy} in between two paths $p,q$ from $x$ to $y$ is then a continu
     \item \textbf{concatenation} : if $p$ is a path from $x$ to $y$ and $q$ is a path from $y$ to $z$ then there is a path $p \cdot q$ from $x$ to $z$ defined by following $p$ then $q$
     \item \textbf{inversion} : if $p$ is a path from $x$ to $y$ then we can follow the path $p$ the other way round to obtain its inverse $p^{-1}$ which is a path from $y$ to $x$
 \end{itemize}
-The special case of \textbf{loops} is obtained by looking at path with the same starting point and ending point. Then the two previous operations are always defined on loops with the same basepoint $x$. More interestingly, those operations are consistant with homotopy of loops and the constant path at point $x$ acts as a unit element.\\ 
-We therefore obtain a group structure for loops (up to homotopy) at basepoint $x$ which is called the \textbf{fundamental group} of $X$ at point $x$ and denoted by $\pi_1(X,x)$. One key property is that \textbf{homeomorphisms} of topological spaces induce \textbf{isomorphisms} for every fundamental group. Since homotopies themselves are continuous maps of topological spaces, one can look at homotopies between homotopies and so on, and we can define some \textbf{higher homotopy groups} $\pi_2,\pi_3,\ldots$
+The special case of \textbf{loops} is obtained by looking at path with the same starting point and ending point. Then the two previous operations are always defined on loops with the same basepoint $x$. More interestingly, those operations are consistant with homotopy of loops and the constant path at point $x$ acts as a unit element.
+We therefore obtain a group structure for loops (up to homotopy) at basepoint $x$ which is called the \textbf{fundamental group} of $X$ at point $x$ and denoted by $\pi_1(X,x)$.\\
+One key property is that \textbf{homeomorphisms} of topological spaces induce \textbf{isomorphisms} for every fundamental group. Since homotopies themselves are continuous maps of topological spaces, one can look at homotopies between homotopies and so on, and we can define some \textbf{higher homotopy groups} $\pi_2,\pi_3,\ldots$
 \paragraph{Homotopy type theory} So, how does it relate to our type theory? At first, one could think of our types as set, like the example of $\mathbb N$ would suggest, and for instance the product type would be analogous to the product set. However, in the previous section we have seen identity types and how these types are generally speaking \textit{not} trivial (that is, every inhabitant is $\mathrm{refl}$).  Thanks to identity types, we would rather think of types as spaces as it is suggested by the following table:
 \begin{center}
 \begin{tabular}{|c|c|}
@@ -335,9 +343,9 @@ We therefore obtain a group structure for loops (up to homotopy) at basepoint $x
 \hline
 \end{tabular}
 \end{center}
-However, this does not make sense until we have proven some additional properties about identity types that should relate to the ones of paths in topology.
-\subsection{Equality and Homotopy}
-We want to establish the following correspondence in between properties on indentity types and paths in homotopy:
+The particular case where types behave like sets, as it is for the type of natural integers, is here recovered through the particular case of \textit{discrete spaces}. However, this does not make sense until we have proven some additional properties about identity types that should relate to the ones of paths in topology.
+\subsection{Equality vs Homotopy}
+In short, we have the following correspondence in between equality types in Type Theory and paths in Homotopy theory:
 \begin{center}
 \begin{tabular}{|c|c|}
   \hline Equality & Homotopy \\
@@ -347,27 +355,185 @@ We want to establish the following correspondence in between properties on inden
   \hline
 \end{tabular}
 \end{center}
+Let's get into a bit more details about operations on equality types, one can prove every statement within this section by easy path inductions.
+\paragraph{Symmetry} Given a path $p : x =_A y$, one has an inverse path $p^{-1} : y =_A x$ such that for any $x$, $\mathrm{refl}_x^{-1} \equiv \mathrm{refl}_x$.
+\paragraph{Transitivity} Given paths $p : x =_A y$ and $q : y =_A z$ one has a concatenated path $p \cdot q : x =_A z$ such that for any $x$, $\mathrm{refl}_x \cdot \mathrm{refl}_x \equiv \mathrm{refl}_x$.\\
+What's crucial about the paths operations we define is that, as it should be expected, they are well behaved up to homotopy, allthough in a type theoretic way. This is encapsulated within the following properties, that can once again be proven by path inductions (the fact that these properties hold relies on how the operations have previously been defined, more details can be found in the HoTT Book\cite{hott}).
 \begin{prop}
-For $A : \mathcal{U}$ and $x,y : A$ there is a function : 
-  $$\mathrm{inv} : (x=y) \rightarrow (y=x)$$
-such that $\mathrm{inv}(\mathrm{refl}_x) \equiv \mathrm{refl}_x$. We will denote $\mathrm{inv}(p)$ by $p^{-1}$.
+  Given a type $A$, $x,y,z,w : A$ and $p : x=y$, $q : y=z$, $r : z=w$, we have the following:
+  \begin{itemize}
+    \item $p = p \cdot \mathrm{refl}_y$ and $ \mathrm{refl}_x \cdot p = p$. 
+    \item $p^{-1} \cdot p = \mathrm{refl}_y$ and $p \cdot p^{-1} = \mathrm{refl}_x$.
+    \item $(p^{-1})^{-1} = p$
+    \item $(p \cdot q) \cdot r = p \cdot (q \cdot r)$ (that is associativity of concatenation)
+  \end{itemize}
 \end{prop}
-\begin{proof}
-By path induction, we only need to define it in the case where $x \equiv y$ and $p \equiv \mathrm{refl}_x$, we then have $(y=x) \equiv (x=x)$ and we terminate the proof by setting $\mathrm{inv}(\mathrm{refl}_x) :\equiv \mathrm{refl}_x$.
-\end{proof}
-
-\section{Cubical Type Theory and the \textsc{Agda} proof assistant}
+To end this section, let's note that we have already proven that functions preserve equal elements, in view of the homotopical interpretation of type theory this means that functions preserve paths, which should be thought of as \textbf{continuity for every non-dependent functions}. Additionally, we should note that \emph{non-dependent} functions behave \textit{functorially} on paths, yielding some natural equalities (such as $f(\mathrm{refl}_x)=\mathrm{refl}_{f(x)}$) that we won't be going through here.
+\subsection{Transport and fibrations}
+Thanks to the homotopical interpretation, we can now set out to do homotopy theory within type theory.\\
+In classical logic, one of the main properties of equality is the \textbf{Leibniz law}, that is if $a=b$ and we have $P(a)$ then $P(b)$ holds. This is also true in HoTT, but can be understood in a different way in wake of the homotopy interpretation. Recalling that a predicate over a type $A$ in type theory is given by a type family $P : A \rightarrow \mathcal{U}$, one can define the following function by path induction :
+$$\mathrm{transport}^P : \prod_{a,b : A} \prod_{p : a=_A b} P(a) \rightarrow P(b)$$
+Under the proposition as types interpretation, this is precisely the Leibniz Law. We may write $\mathrm{transport}^P(a,b,p)$ as $p_*$ if the context is clear.\\
+Now, in classical homotopy theory a \textbf{fibration} is defined as a continuous map $p : E \rightarrow B$ of topological spaces satisfying a certain path lifting property from the base space $B$ to the total space $E$. For $b : B$, $p^{-1}(B)$ is called the \textbf{fiber} at or over the point $b$. In HoTT, one can recover fibrations via type families. More precisely, given a type family $P : A \rightarrow \mathcal{U}$, the space $ \sum_{x : A} P(x)$ equipped with the first projection $\mathrm{pr}_1 : \sum_{x : A} P(x) \rightarrow A$ is a fibration with base space $A$ in the following sense : 
+\begin{prop}[Path lifting]
+  Given $x : A$ and $u : P(x)$, for any $y : A$ and $p : x=y$, one has a path 
+  $$\mathrm{lift}(p,u) : (x,u) = (y,p_*(u))$$
+  such that $\mathrm{pr}_1(\mathrm{lift}(p,u)) = p$.
+\end{prop}
+This shows that paths in the base space of $\sum_{x : A} P(x)$ can be lifted in the expected way. Indeed, the Leibniz law we previously stated shows how one can identify elements from fibers $P(x)$ and $P(y)$ with respect to a certain path $p : x=y$, and the path lifting property tells us exactly that given a path $p: x = y$ in the base space and a point $u : P(x)$ in the fiber over $x$, we have a path in the total space between $(x,u)$ and the point in the total space you should expect that it is transported to via $p$, namely $(y,p_*(u))$. The fact that $\mathrm{pr}_1(\mathrm{lift}(p,u)=p)$, tells us in a way that the path $\mathrm{lift}(p,u)$ in the total spaces \textit{lies over} the path $p$ in $A$ (this should prove to be useful later on).
+\subsection{Equivalences and the univalence axiom}
+Under the homotopical interpretation we have seen that equalities should be understood as paths. In topology, we have a notion of \textbf{homotopy} between functions, that one can naturally recover in HoTT:
+\begin{mydef}[Homotopy]
+  Given $P : A \rightarrow \mathcal{U}$ and $ f,g : \prod_{x : A} P(x)$ we define the type of homotopies between $f$ and $g$ by
+  $$(f \sim g) :\equiv \prod_{x : A} (f(x)=g(x))$$
+\end{mydef}
+A priori, this is \textit{not} the same as the type $f =g$. Now, let's move on to types : what exactly is an equality between types ? Firs, as types can be seen as inhabitant of a certain universe type, we do have equality types in between types themselves.
+In topology, thanks to homotopies, one can define homotopically equivalent spaces as spaces $X,Y$ with two maps $f : X \rightarrow Y$ and $g : Y \rightarrow X$ such as both their composites are homotopical to the identity maps. Allthough it would be natural, this is \textit{not} what is retained as the definition for equivalence of types, but corresponds to so called \textbf{quasi-equivalences} of types. We won't be defining equivalence of types here, but it goes along the lines of the one of quasi-equivalences. In fact, and that is what should be taken away, one can build an equivalence from a quasi-equivalence and vice-versa. We will often be building quasi-equivalences to show that two types are equivalent. We will write the type of equivalences in between $A$ and $B$ as $A \simeq B$.\\
+\paragraph{Univalence}
+If we talked about equivalences first, it is because they play a fundamental role in HoTT thanks to the univalence axiom. One should expect equal types to be equivalent and that is the case, meaning that we have a function: 
+$$\mathrm{idToEquiv : A = B \rightarrow} A \simeq B$$
+Now, the \textbf{univalence axiom} consists in giving ourselves an arrow in the other direction:
+$$\mathrm{ua} : A \simeq B \rightarrow A = B$$
+And moreover, $\mathrm{ua}$ is such that it is a quasi-inverse to $\mathrm{idToEquiv}$ meaning that they are at turn equivalences, hence : 
+$$(A \simeq B) \simeq  (A = B)$$
+This whole univalence axiom, proposed by \textit{Vladimir Voevodsky}, allows us to identify equivalent types, as it usually done, allthough in an informal way, in classical mathematics. 
+\subsection{Characterizing equality types in type formers}
+We have previously seen that in a product type $A \times B$, given a path $p : x=y$, we can apply $\mathrm{pr}_1$ and $\mathrm{pr}_2$ to obtains paths $\mathrm{pr}_1(p) : \mathrm{pr}_1(x)=_A \mathrm{pr}_1(y)$ and $\mathrm{pr}_2(p) : \mathrm{pr}_2(x)=_B \mathrm{pr}_2(y)$. This allows us to define a function of type : 
+$$ (x =_{A\times B} y) \rightarrow (\mathrm{pr}_1(x)=_A \mathrm{pr}_1(y)) \times (\mathrm{pr}_2(x)=_B \mathrm{pr}_2(y))$$
+In fact, it turns out that it is an equivalence:
+\begin{theorem}
+The function previously defined is an equivalence so one has :
+$$(x=_{A \times B} y) \simeq (\mathrm{pr}_1(x)=_A \mathrm{pr}_1(y)) \times (\mathrm{pr}_2(x)=_B \mathrm{pr}_2(y))$$
+\end{theorem}
+The conclusion of this theorem is pretty natural, equalities in product types are exactly pairwise equalities, or, under the homotopical interpretation, paths in a product are exactly pairs of paths.\\
+Things get a bit more trickier when looking at $\Sigma$-types. Given a type family $B : A \rightarrow \mathcal{U}$, what do equalities in $\sum_{x : A} B(x)$ look like ? To answer this specific question , we need to elaborate a bit more on the notion of paths lying over other paths.
+\paragraph{Paths over paths} Given a type family $P : A \rightarrow \mathcal{U}$ and a path $p : x=_A y$ we have a fibration which total space is $\sum_{x : A} P(x)$. Given a dependent function $f : \prod_{x :A } P(x)$, we would like to apply $f$ to $p$ in order to obtain a path $f(p) : (x,f(x))=f(y,f(y))$ in the total space of our fibration, lying over $p$. The previous proposition already gives a canonical path lying over $p$, namely $\mathrm{lift}(p,(f(x)) : (x,f(x)) = (y,p_*(f(x)))$, so, essentially, any path lying over $p$ between $((x,f(x)))$ and $(y,f(y))$ should factor through this canonical path $\mathrm{lift}(p,f(x))$. Up to equivalence, this would mean providing a path between points $p_*(f(x))$ and $f(y)$ lying in the fiber $P(y)$. And, as it should be expected, dependent functions yield such paths : 
+\begin{prop}
+Given $f : \prod_{x : A} P(x)$ and $x,y : A$, one has a map : 
+$$\mathrm{apd}_f : \prod_{p : x=_A y} p_*(f(x))=f(y)$$
+\end{prop}
+Now, given a path $p :w =_{\sum_{x : A} B(x)} w'$, we can apply the (non-depedent) function $\mathrm{pr}_1$ to obtain a path $\mathrm{pr}_1(p) : \mathrm{pr}_1(w) =_A \mathrm{pr}_1(w')$, and thanks to the previous proposition and using the dependent function $\mathrm{pr}_2$, we obtain a path between $\mathrm{pr}_1(p)_*(\mathrm{pr}_2(w))$ and $\mathrm{pr}_2(w')$ lying in the fiber $B(\mathrm{pr}_1(w'))$. This, as previously seen is a path between $\mathrm{pr}_2(w)$ and $\mathrm{pr}_2(w')$ lying over the path $\mathrm{pr}_1(p)$. This allows us to define a map of type : 
+$$w=_{\sum_{x : A} B(x)} w' \rightarrow \sum_{p : (\mathrm{pr}_1(w)=_A \mathrm{pr}_1(w'))} (p_*(\mathrm{pr}_2(w))=\mathrm{pr}_2(w'))$$
+Once again, it turns out that this map is an equivalence,
+\begin{theorem}
+Let $B : A \rightarrow \mathcal{U}$ be a type family over $A$ and $w,w'$ be points of $\sum_{x : A} B(x)$, then there is an equivalence :
+$$(w=_{\sum_{x : A} B(x)} w') \simeq \sum_{p : (\mathrm{pr}_1(w)=_A \mathrm{pr}_1(w'))} (p_*(\mathrm{pr}_2(w))=\mathrm{pr}_2(w'))$$
+\end{theorem}
+This means that an equality between two points $w$ and $w'$ is given by a path $p$ in $A$ between their first components and a path from $\mathrm{pr}_2(w)$ and $\mathrm{pr}_2(w')$ in the total space lying over this specific path $p$.
+\subsection{Higher Inductive Types}
+We have already seen an example of an inductive type : $\mathbb N$. When describing \textbf{higher inductive types}, we allow ourselves to use constructors that are not only points of the type, but also paths, paths between paths and every kind of higher paths one could think of. Those are especially useful when describing some concrete topological spaces, or constructions from topological spaces. Recall that in mathematics, one can define the circle $\mathbb{S}^1$ as the interval $[0,1]$ where points $0$ and $1$ indentified. This in fact gives two examples of HITs. The first one, is the interval type $I$ given by the following description:
+\begin{itemize}
+  \item $0 : I$
+  \item $1 : I$
+  \item $\mathrm{glue} : 0=_I 1$
+\end{itemize}
+And the second one is the circle type $\mathbb{S}^1$ : 
+\begin{itemize}
+  \item $\mathrm{base} : \mathbb{S}^1$
+  \item $\mathrm{loop} : \mathrm{base} =_{\mathbb{S}^1} \mathrm{base}$
+\end{itemize}
+Then, one could ask what induction principles would look like for HITs? We are able to describe induction principles on any given HIT, however, as there isn't really any generic description of what a HIT is, there is no general framework to answer this question. So, let's take a look at the case of the circle $\mathbb{S}^1$. The recursion principle for the circle states that to define a (non-dependent) map out of the circle to a type $A$ equipped with a point $a :A$ and a path $ p : a=_A a$ then there is a unique map $f : \mathbb{S}^1$ such that $f(\mathrm{base}) \equiv a$ and $\mathrm{ap}_f(\mathrm{loop}) =p$ (there is actually a case as to whether those equalities should be definitional or propositional, but we'll stick to the choice made in the HoTT book).\\
+Regarding the induction principle, things get much trickier. Let $P : \mathbb{S}^1 \rightarrow \mathcal{U}$ be a type family over the circle. To define a dependent map $f : \prod_{x : \mathbb{S}^1} P(x)$, one needs to specify its value on the base point $f(\mathrm{base}) :\equiv b : P(\mathrm{base})$. Then the question is, what should the path $\mathrm{loop} : \mathrm{base} = \mathrm{base}$ be sent to ? Well, recall $\mathrm{loop}$ induces by transport a map $\mathrm{loop}_* : P(\mathrm{base}) \rightarrow P(\mathrm{base})$ so the path $\mathrm{loop}$ should be sent to a path lying over $\mathrm{loop}$ in the fiber $P(\mathrm{base})$, and that is, according to the previous section, a path $l : b=\mathrm{loop}_*(b)$.\\
+Given $P : A \rightarrow \mathcal{U}$, $u,v : A$ and a path $p : u=_A v$, we define the type of paths lying over $p$ or \textbf{dependent paths} as :
+$$(u=_p^P v) :\equiv (p_*(u)=v)$$
+Accordingly, the induction principle for the circle is the following : to define a map $f : \prod_{x : \mathbb{S}^1} P(x)$ one needs to specify
+\begin{itemize}
+  \item Its value on the base point $f(\mathrm{base}) :\equiv b : P(\mathrm{base}$)
+  \item A dependent path $l : \mathrm{base}=_{\mathrm{loop}}^P \mathrm{base}$
+\end{itemize}
+And the conclusion is that there is a unique map $f$ of type $\prod_{x : \mathbb{S}^1} P(x)$ such that $f(\mathrm{base}):\equiv b$ and $\mathrm{apd}_f(\mathrm{loop})=l$.\\
+Here, we can see that for a HIT with only two constructors (one being a path) the induction principle already requires to talk about paths over paths. Using higher dimensional paths in HITs produce some increasingly complicated induction principles. Let's now illustrate a few useful constructions using HITs:
+\begin{itemize}
+  \item \textbf{(Homotopy) Pushouts} : Suppose given types $A,B,C$ as well as maps $f : C \rightarrow A$ and $g : C \rightarrow B$. We define its \textbf{pushout} type $A \sqcup_C B$ as the following HIT:
+    \begin{itemize}
+      \item $\mathrm{inl} : A \rightarrow A \sqcup_C B$
+      \item $\mathrm{inr} : B \rightarrow A \sqcup_C B$
+      \item $\mathrm{glue} : \prod_{c : C} \mathrm{inl}(f(c))=\mathrm{inr(g(c))}$
+    \end{itemize}
+  The pushout of $A$ and $B$ over the empty type yields the usual coproduct type. This type should be thought of as the disjoint union of $A$ and $B$ where elements coming from the same point $c : C$ are identified (homotopically speaking).
+  \item \textbf{(Homotopy) Coequalizers} Given types $B,A$ and maps $f,g : B \rightarrow  A$ the (homotopy) \textbf{coequalizer} type $\mathrm{CoEq(f,g)}$ is given by the HIT:
+    \begin{itemize}
+      \item $c : A \rightarrow \mathrm{CoEq(f,g)}$
+      \item $p : \prod_{a : A} c(f(a))=c(g(a))$
+    \end{itemize}
+    Taking $A$ and $B$ to be the unit types with one element $1$ and $f,g$ to be the canonical maps that send $1$ to $1$ their coequalizer is given by a type with a point $c(1)$ and a path from $c(1)$ to $c(1)$ : we recover the definition of the circle $\mathbb{S}^1$ !
+  \item \textbf{Truncations} : Given a type $A$, one can build its propositional truncation $||A||$ with the following HIT:
+    \begin{itemize}
+      \item $c : A \rightarrow ||A||$
+      \item for each $x,y : ||A||$ a path $x=y$
+    \end{itemize}
+    The idea is that $||A||$ is only sensible to whether the type $A$ is inhabited or not. Without getting into too many details, we have already seen the notion of higher homotopy groups in classical topology. In HoTT, one can define the notion of $n$-truncation of a type $A$ which consists in trivializing every homotopy groups from level $n+1$ in $A$. Our propositional truncation can then be thought of as a $(-1)$-truncation. The $1$-truncation of $A$ thus only keeps the homotopy relevant information of $\pi_0(A)$ (connectedness) and of its fundamental group $\pi_1(A)$.
+\end{itemize} 
+\section{Cubical type theory and the \textsc{Agda} proof assistant}
+\textbf{Cubical type theory} works in a slightly different way than what we have seen, but the same philosophy applies and the results previously mentionned still hold (or analogous statements hold but these should not worry us here). All the work done during the internship in the \textsc{Agda} proof assistant was done with the cubical agda library \cite{cubicalagda} which is an implementation of univalent cubical type theory. We'll take a look at a few specifities and main features of cubical type theory aswell as their implementation in cubical agda. The presentation is inspired by \cite{CubAgdaDoc} , \cite{CubTT} (section 3).
+\paragraph{Path types} Those are inspired by the homotopical interpretation of identity types in Martin Löf's type theory. Let's first start with the interval type that is described by the following grammar : 
+$$I \hspace{2pt} ::= \hspace{2pt} i_0 \hspace{2pt} \vert \hspace{2pt}i_1 \vert \hspace{2pt}  i \hspace{2pt} \vert \hspace{2pt}  j \hspace{2pt} \vert \hspace{2pt} \sim i \hspace{2pt} \vert \hspace{2pt} i \land j \hspace{2pt}\vert \hspace{2pt} i \lor j$$
+Variables $i,j : I$ should be seen as ranging in a "formal" interval playing the role of $[0,1]$. They can either be substituted by $i_0$ (playing the role of $0$) or $i_1$ (playing the role of $1$). Furthermore, the three operations $\sim, \hspace{2pt} \land, \hspace{2pt} \lor$ satisfy the property of a De Morgan algebra with inversion being $\sim$, that is for instance $\sim \sim i \equiv i$, $\land$ behaves like the minimum operation and $\lor$ like the maximum.\\
+Having this interval type, we can define path types that should play a similar role to identity types families in Martin Löf's type theory. Given a type family $P$ over the interval type $I$ and two elements $x : P(i_0)$ and $y : P(i_1)$, one has (in cubical agda notations) the type: 
+$$\mathrm{PathP} \hspace{2pt} P \hspace{2pt} x \hspace{2pt} y$$
+In the case where the type family $P$ is constant at $A : \mathcal{U}$, we can simply write it $\mathrm{Path} \hspace{2pt} x \hspace{2pt} y$, $x=y$ or $x \equiv y$ (that is the case in cubical agda). This type consists of functions $p : I \rightarrow A$ such that $p(i_0)\equiv a$ and $p(i_1) \equiv b$. We recover a definition ressembling the one of classical topology. We have the same operations and computational properties previously stated in the section about indentity types in HoTT. One can easily define path inversion, given a path $p : I \rightarrow A$, its inverse path is given by the path $p^{-1} :\equiv i \mapsto p( \sim i)$ or the constant path at $a : A$ by $ \mathrm{refl}_a :\equiv i \mapsto a$. Defining the composition will be the occasion to show the \textbf{filling property} which plays a crucial role in cubical type theory. Suppose given an incomplete square of paths:
+\begin{center}
+  \begin{tikzcd}
+    a \arrow[r, "p"] \arrow[d, "q"'] & b \arrow[d, "r"] \\
+    c                                & d               
+    \end{tikzcd}  
+\end{center}
+Then there is a unique path $s : c = d$ filling the square by making it commute. One can obtain path concatenation operations by setting $c \equiv a$, $p \equiv \mathrm{refl}_a$ and taking $p \cdot r$ to be the unique path $s$ filling this specific square.\\
+All the expected equations around those path operations hold but we won't be looking at it in any more details. Let's also remark that for a function $f : A \rightarrow B$ and a path in $A$ $p: I \rightarrow A$, by composing we obtain a path $f \circ p : I \rightarrow B$ from $f(p(i_0))$ to $f(p(i_1))$ in $B$, easily recovring the definition of $\mathrm{ap}_f$ in HoTT. In cubical agda, the notation $\mathrm{cong}$ is used rather than $\mathrm{ap}_f$. \\
+Let's go back to the general case of the type $\mathrm{PathP} \hspace{2pt} P \hspace{2pt} x \hspace{2pt} y$ where $P$ isn't necessarily a constant type family. Here $P$ is indeed a path in between the types $P(i_0)$ and $P(i_1)$ by definition. Hence, as in HoTT, it should induce a map $P(i_0) \rightarrow P(i_1)$ (much like transport) and so the type $\mathrm{PathP} \hspace{2pt} P \hspace{2pt} x \hspace{2pt} y$ should be thought as the equivalent of the type "$P_*(x)=_{P(i_1)} y$" (allthough this is clearly an abusive notation). Setting $P$ to be a constant type family, we recover what we said in the previous paragraph.
+\paragraph{Squares and cubes} We have already encountered a square with the filling property. In fact, squares and cubes play a huge role in cubical type theory. \\
+Given a type $A$, a square is given by a commutative square of paths in $A$ : 
+\begin{center}
+  \begin{tikzcd}
+    {a_{0,1}} \arrow[r, "s"]                & {a_{1,1}}                 \\
+    {a_{0,0}} \arrow[u, "p"] \arrow[r, "r"] & {a_{1,0}} \arrow[u, "q"']
+    \end{tikzcd}
+\end{center}
+Which means that $\boxed{p \cdot s \equiv r \cdot q}$. The type of such squares in cubical agda is defined as the following : 
+$$\text{Square $p$ $q$ $r$ $s$ $:\equiv$ PathP $\big(\lambda i \mapsto (r(i) \equiv s(i))\big)$ $p$ $q$}$$
+If $c$ is an element of such a square type than as $i$ varies along $I$, $c \hspace{3pt} i$ should be thought of a path lying between $p$ and $q$ and whose boundaries are $r \hspace{3pt} i$ and $s \hspace{3pt} i$ respectively, as the following diagram suggests:
+\begin{center}
+  \begin{tikzcd}
+    {a_{0,1}} \arrow[rr, "s"]                                            & {}                                            & {a_{1,1}}                                            \\
+                                                                         &                                               &                                                      \\
+    {a_{0,0}} \arrow[rr, "r"'] \arrow[uu, "p \equiv c \hspace{3pt} i_0"] & {} \arrow[uu, "c \hspace{3pt} i", shift left] & {a_{1,0}} \arrow[uu, "q \equiv c \hspace{3pt} i_1"'] \\
+    i_0 \arrow[rr, bend right]                                           & i                                             & i_1                                                 
+    \end{tikzcd} 
+\end{center}
+In fact having this element $c$ is tantamount to "filling the square". Let's illustrate with the example of the two dimensional torus.
+\paragraph{The Torus $\mathbb{T}^2$} In classical mathematics, the torus $\mathbb{T}^2$ would be defined as the square $[0,1]\times[0,1]$ were the opposite edges are identified. As a \textbf{cell complex} (we will come to this soon), it would have the following description (illustration taken from \cite{hatcher}):
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[height= 2.5cm]{torus.png}
+  \end{center}
+\end{figure}
+\\
+In HoTT, this suggests the following definition by a HIT were we would manually fill the square:
+\begin{itemize}
+  \item $ p : \mathbb{T}^2$
+  \item $a : p = p$
+  \item $b : p = p $
+  \item $\mathrm{fill} :  a \cdot b = b \cdot a$
+\end{itemize}
+And thanks to square types in cubical theory we can also give the following definition (in the cubical agda syntax, which should be readily understandable) : 
 \begin{lstlisting}[mathescape=true]
-    data Torus1 : Type where
-    base : Torus1
-    loop : base $\equiv$ base    
+    data Torus2 : Type where
+    p : Torus2
+    a : $ p \equiv p$
+    b : $p \equiv p$
+    fill : Square b b a a
 \end{lstlisting}
-\newpage
-\section{Bibliography}
-\cite{hott}
+Similarly, one can complete cubes in cubical type theory, but the structures involved quickly gain in complexity (but we shall look at such cubes later on).
+\chapter{The Hypercubic manifold in Homotopy Type Theory} 
+In this part, we'll cover the work done during the internship. The formalized proofs and attempts of proofs can be found on the following GitHub repository \cite{repo}.
+\section{Defining the hypercubic manifold}
+The first part of the work was to give a formalized definition of the \textbf{hypercubic manifold}. As previously stated, this manifold can be obtained as the adjunction space of a 3-dimensional hypercub where opposite sides are identified with a quarter turn rotation. This is best illustrated in the following video \cite{VHvideo}. At the end of the day, it can be presented as the following object (illustration taken from \cite{hypercubic}):
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[height= 6.5cm]{cube-3-2.png}
+  \end{center}
+\end{figure}\\
+Our goal is to define this object as a HIT, since we can already see what vertices,edges should be there. There are a few things that should be thought of however. First, this HIT would require filling a cube which can be a little tricky. Second, opposite faces are actually the same under a quarter turn rotation so this should also be sorted ouf within our HIT and this kind of structure didn't appear for the circle or the torus we previously saw. It should also be noted that filling squares is feasible in Hott since it is tantamount to a commuting square of paths. However, filling cubes ought to be much more complicated since it deals with relations on squares. This is where cubical type theory comes in very handy for our purpose.
 \printbibliography
-\newpage
-\section{Acknowledgements}
-\newpage
-\section{Annex}
+
 \end{document}
