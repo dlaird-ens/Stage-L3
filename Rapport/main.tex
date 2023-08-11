@@ -385,6 +385,29 @@ Now, in classical homotopy theory a \textbf{fibration} is defined as a continuou
   $$\mathrm{lift}(p,u) : (x,u) = (y,p_*(u))$$
   such that $\mathrm{pr}_1(\mathrm{lift}(p,u)) = p$.
 \end{prop}
+\begin{center}
+  \begin{tikzpicture}[scale=0.865]
+    \draw (0,7) ellipse (4.4cm and 2.5cm);
+    \draw (-1.7,7) ellipse (1.15cm and 1.05cm);
+    \draw (1.7,7) ellipse (1.15cm and 1.05cm);
+    \filldraw (-1.7,7) circle (1.5pt) node [above left] {$u$};
+    \filldraw (1.7,7) circle (1.5pt) node [above right] {$p_*(u)$};
+    \draw (-1.7,7) .. controls (-1,8) and (1,8) .. (1.7,7) node [midway, above] {$\mathrm{lift}(p,u)$};
+  
+    \draw [dash pattern=on 5pt off 3pt] (-1.7,0) -- (-1.7,7) (1.7,0) -- (1.7,7);
+    \draw [very thick, ->] (-3,4.5) -- (-3,1.5) node [midway,left] {$\mathrm{pr}_1$};
+  
+    \draw (0,0) ellipse (4.4cm and 1.5cm);
+    \filldraw (-1.7,0) circle (1.5pt) node [below left] {$x$};
+    \filldraw (1.7,0) circle (1.5pt) node [below right] {$y$};
+    \draw (-1.7,0) .. controls (-0.7,0.7) and (0.7,0.7) .. (1.7,0) node [midway, above] {$p$};
+     
+    \node (A) at (4.5,-1.5) {$A$};
+    \node (B) at (5,5.5) {$\displaystyle\sum_{a:A} B(a)$};
+    \node (C) at (-3.5,7) {$B(x)$};
+    \node (D) at (3.5,7) {$B(y)$};
+  \end{tikzpicture}
+\end{center}
 This shows that paths in the base space of $\sum_{x : A} P(x)$ can be lifted in the expected way. Indeed, the Leibniz law we previously stated shows how one can identify elements from fibers $P(x)$ and $P(y)$ with respect to a certain path $p : x=y$, and the path lifting property tells us exactly that given a path $p: x = y$ in the base space and a point $u : P(x)$ in the fiber over $x$, we have a path in the total space between $(x,u)$ and the point in the total space you should expect that it is transported to via $p$, namely $(y,p_*(u))$. The fact that $\mathrm{pr}_1(\mathrm{lift}(p,u)=p)$, tells us in a way that the path $\mathrm{lift}(p,u)$ in the total spaces \textit{lies over} the path $p$ in $A$ (this should prove to be useful later on).
 \subsection{Equivalences and the univalence axiom}
 Under the homotopical interpretation we have seen that equalities should be understood as paths. In topology, we have a notion of \textbf{homotopy} between functions, that one can naturally recover in HoTT:
@@ -523,10 +546,12 @@ If $c$ is an element of such a square type than as $i$ varies along $I$, $c \hsp
     \end{tikzcd} 
 \end{center}
 In fact having this element $c$ is tantamount to "filling the square". Let's illustrate with the example of the two dimensional torus.
-\paragraph{The Torus $\mathbb{T}^2$} In classical mathematics, the torus $\mathbb{T}^2$ would be defined as the square $[0,1]\times[0,1]$ were the opposite edges are identified. It can be given the following abstract representation (illustration taken from \cite{hatcher}):
+\paragraph{The Torus $\mathbb{T}^2$} In classical mathematics, the torus $\mathbb{T}^2$ would be defined as the square $[0,1]\times[0,1]$ were the opposite edges are identified. It can be given the following abstract representation as a \textbf{cell complex}(we'll talk about them  later on):
 \begin{figure}[h]
   \begin{center}
     \includegraphics[height= 2.5cm]{torus.png}
+    \caption{The torus $\mathbb{T}^2$ and its presentation as a cell complex (source: \cite{hatcher})}
+    \label{fig:torus}
   \end{center}
 \end{figure}
 \\
@@ -554,6 +579,7 @@ The first part of the work was to give a formalized definition of the \textbf{hy
   \begin{center}
     \includegraphics[height= 6.5cm]{cube-3-2.png}
     \caption{The hypercubic manifold}
+    \label{fig:H1M}
   \end{center}
 \end{figure}\\
 Our goal is to define this object as a HIT, since we can already see what vertices,edges should be there. There are a few things that should be thought of however. First, this HIT would require filling a cube which can be a little tricky. Second, opposite faces are actually the same under a quarter turn rotation so this should also be sorted ouf within our HIT and this kind of structure didn't appear for the circle or the torus we previously saw. It should also be noted that filling squares is feasible in HoTT since it is tantamount to a commuting square of paths. However, filling cubes ought to be much more complicated since it deals with relations on squares. This is where cubical type theory comes in very handy for our purpose.\\
@@ -581,9 +607,16 @@ We now have every ingredient to define the hypercubic manifold. Let's first choo
   \begin{center}
     \includegraphics[height= 4.5cm]{images/Agda - VH.png}
     \caption{Synthetic description of the hypercubic manifold as a cubical HIT in cubical agda}
+    \label{fig:H1Magda}
   \end{center}
 \end{figure}\\
-We shall now recover a known result about the fundamental group of the hypercubic manifold. 
+We shall now recover a known result about the fundamental group of the hypercubic manifold that we will denote by $\mathbb{HM}^1$ from now on. 
+\begin{theorem}
+  We have that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ where $\mathcal{Q}$ is the quaternion group.
+\end{theorem}
+Before proving this claim we shall be taking a bit about \textbf{cell complexes} that we have first seen in \ref{fig:torus}. A cell complex is a topological space built inductively by successively attaching $0$-cells (points), $1$-cells (paths) and so on. In little dimensions, one can give them an abstract presentation as the one of the torus. The way these spaces are built should remind of higher inductive types, where one specifies some point constructors ($0$-paths), then path constructors ($1$-paths) and so on. In the section 6.6 of the HoTT book \cite{hott} one can find a bit more details about how a cell complex can be converted into a HIT. The idea is that attaching $n$-cells can be done by specifiying algebraic relations (such as $p \cdot q = q \cdot p$ for the torus) on lower dimensional constructors. It appears that the represenation of $\mathbb{HM}^1$ in \ref{fig:H1M} is also a cell-complex representation and that the cubical definition in \ref{fig:H1Magda} is precisely its conversion into a HIT.\\
+Now, in classical homotopy theory the fact that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ is well known and follows from a corollary of the \textbf{Seifert Van Kampen} theorem, stating that the fundamental group of a cell complex is given by the fundamental group of its $2$-skeleton (that is the complex where all cells of dimensions $>2$ are removed), more details can be found in \cite{hypercubic} and \cite{FundamentalCellComplex}. All we want to do here is check that the HIT we defined has the correct fundamental Then it can be shown that the fundamental group of a cell complex with one $0$-cell is given by the presentation $\langle S \hspace{2pt} \vert\hspace{2pt} R \rangle$ where you have one generator in $S$ for every $1$-cell and one relation for any $2$-cell.\\
+Now, the relations that the $2$-cells should give are precisely the one used when you convert a cell complex into a HIT so we can indeed chack that the fundamental group of \ref{fig:H1Magda} is $\mathcal{Q}$ as it should be the case. 
 \printbibliography
 
 \end{document}
