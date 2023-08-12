@@ -250,7 +250,7 @@ We are now set to prove the \textbf{propositional uniqueness principle of produc
   $$\mathrm{uniq}_{A\times B} : \prod_{x : A \times B} \big(x =_{A \times B} (\mathrm{pr}_1(x),\mathrm{pr}_2(x))\big)$$
 \end{prop}
 \begin{proof}
-     Here, we want to build the dependent function $\mathrm{uniq}_{A\times B}$. We will hence be using the induction principle for product types, which states that we need to exhibit for any pair $a : A$ and $b : B$ an element$f(a)(b)$ of type $(a,b)=_{A \times B} (\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$. However,  $(\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$ is \textbf{definitionnally} equal to $(a,b)$ (by the definition that we have given of the projections) and so we are reduced to exhibit $f(a)(b) : (a,b)=_{A \times B} (a,b)$.\\ 
+     Here, we want to build the dependent function $\mathrm{uniq}_{A\times B}$. We will hence be using the induction principle for product types, which states that we need to exhibit for any pair $a : A$ and $b:B$ an element$f(a)(b)$ of type $(a,b)=_{A \times B} (\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$. However,  $(\mathrm{pr}_1((a,b)),\mathrm{pr}_2(a,b))$ is \textbf{definitionnally} equal to $(a,b)$ (by the definition that we have given of the projections) and so we are reduced to exhibit $f(a)(b) : (a,b)=_{A \times B} (a,b)$.\\ 
      We shall now use a fact that we haven't seen yet about identity types, but that should seem familiar, is that for any $x$ of some type $X$ the type $x=_{X}x$ is inhabited by an element $\mathrm{refl}_x$. We can therefore set $f(a)(b) :\equiv \mathrm{refl}_{(a,b)}$ to terminate the proof.
 \end{proof}
 \subsection{Dependent pair types ($\Sigma$-types)}
@@ -261,14 +261,14 @@ As for product types, one can define dependent and non dependent functions $f$ o
 The recursion principle allows us to define (again) the first projection $\mathrm{pr}_1 : \sum_{x : A} B(x) \rightarrow A$ by $\mathrm{pr}_1 (a,b) :\equiv a$.\\
 However, defining the second projection is now a bit trickier since it should have the type $\prod_{p : \sum_{x : A} B(x)} \mathrm{pr}_1(p)$, making it a dependent function. It thus requires the use of the induction principle, and we can define it by its values on dependant pairs by $\mathrm{pr}_2(a,b) :\equiv b$.
 \subsection{Coproduct types}
-Given types $A$ and $B$, one can define their coproduct type $A+b$ inductively with two constructors:
+Given types $A$ and $B$, one can define their coproduct type $A+B$ inductively with two constructors:
 \begin{itemize}
   \item inl : $A \rightarrow A+B$
   \item inr : $B \rightarrow A+B$
 \end{itemize}
 It should be thought of as containing two disjoints copies of $A$ and $B$. The induction principle is here tantamount to \textbf{case analysis}, to define a function over $A+B$ one needs to specify its value on elements $inl(a)$ for $a:A$ and on elements $inr(b)$ for $b:B$. 
 \subsection{Propositions as types}
-We will be looking at Type Theory in details in the next section, for now let's just take a look at the following table showing the \textbf{Proposition as Types correspondance} also known as the \textbf{Curry-Howard isomorphism}:
+\begin{figure}[h]
 \begin{center}
 \begin{tabular}{|c|c|}
 \hline Types & Logic  \\
@@ -282,7 +282,8 @@ We will be looking at Type Theory in details in the next section, for now let's 
 \hline
 \end{tabular}
 \end{center}
-This correspondence shows the similarity in between type forming rules and rules of propositional logic when seeing "propositions as types" and vice versa. For instance, if one wants to build a term of type $A \times B$, one needs a term $a : A$ and a term $b : B$ to form $(a,b) : A \times B$. Similarly, to prove the proposition $A \land B$, one needs a proof of $A$ and a proof of $B$. \\
+\end{figure}
+The propositions as types correspondence shows the similarity in between type forming rules and rules of propositional logic when seeing "propositions as types" and vice versa. For instance, if one wants to build a term of type $A \times B$, one needs a term $a : A$ and a term $b : B$ to form $(a,b) : A \times B$. Similarly, to prove the proposition $A \land B$, one needs a proof of $A$ and a proof of $B$. \\
 In the same way, building a function $f : A \rightarrow B$ (or a proof of $A \implies B)$ requires to be able to build an element of $B$ (a proof of $B$) given an element an $A$ (given a proof of $A$).\\
 Under this correspondence, it also makes sense to talk about a predicate over a type $A$ for a type family $P : A \rightarrow \mathcal{U}$. Then, for $a :A$ the type $P(a)$ corresponds to the propositions "$P$ holds for $a$". We then have the following correspondance : 
 \begin{center}
@@ -314,6 +315,21 @@ The \textbf{path induction} principle indicates that to prove this predicate for
 \end{proof}
 Under the proposition as types interpretation, this induction principle states that to prove a predicate over a \textit{family} of identity types, namely $P : \prod_{x,y : A} (x=y) \rightarrow \mathcal{U}$, it suffices to prove it in the case where both ends are definitionnaly equal and that their proof of equality is reflexivity. There is another (but equivalent) induction principle called \textbf{based path induction} where one of the ends $x$ or $y$ is fixed to a certain element of $A$. However, in both these versions it is crucial to note that the induction principle is about a \textit{family} of identity types, and not one identity type with both ends fixed.\\
 As an example, this principle does \textit{not} imply that every identity type is "trivial". Such a statement would go along those lines "for $a : A$ and $p: a=a$ we have that $p = \mathrm{refl}_a$". This statement isn't about identity types \textit{families} so our induction principle does not apply.
+\paragraph{Pullbacks}
+Given maps $f : A \rightarrow C$ and $g : B \rightarrow C$ their \textbf{pullback} type is defined by: \\
+\begin{minipage}{.5\textwidth} 
+  $$A \times_C B \hspace{3pt} :\equiv \hspace{3pt}\sum_{x : A} \sum_{y : B} (f(x)=g(y))$$
+\end{minipage} 
+\begin{minipage}{.5\textwidth} 
+  \begin{center}
+    \begin{tikzcd}
+      A\times_C B \arrow[d, "\mathrm{pr}_1"'] \arrow[r, "\mathrm{pr}_2"] & B \arrow[d, "g"] \\
+      A \arrow[r, "f"']                                                  & C               
+    \end{tikzcd}
+    \label{fig:pullbacksquare}
+  \end{center}
+\end{minipage}
+It should be thought as the subtype of $A\times B$ of pairs $(a,b)$ for which $f(a)=g(b)$. The pullback type naturally fits in the commutative square on the right hand side, that we will call a pullback square.
 \section{Homotopy Type Theory}
 \subsection{Classical homotopy theory}
 In classical topology, if $X$ is a topological space and $x,y$ are points of $X$, a \textit{path} between $x$ and $y$ is a continuous map $p : [0,1] \rightarrow X$ such that $p(0)=x$ and $p(1)=y$.\\
@@ -324,7 +340,7 @@ A \textbf{homotopy} in between two paths $p,q$ from $x$ to $y$ is then a continu
 \end{itemize}
 The special case of \textbf{loops} is obtained by looking at path with the same starting point and ending point. Then the two previous operations are always defined on loops with the same basepoint $x$. More interestingly, those operations are consistant with homotopy of loops and the constant path at point $x$ acts as a unit element.
 We therefore obtain a group structure for loops (up to homotopy) at basepoint $x$ which is called the \textbf{fundamental group} of $X$ at point $x$ and denoted by $\pi_1(X,x)$.\\
-Since homotopies themselves are continuous maps of topological spaces, one can look at homotopies between homotopies and so on, and we can define some \textbf{higher homotopy groups} $\pi_2,\pi_3,\ldots$. Those groups are interesting since they are algebraic invariant of homeomorphical, or more precisely, homotoically equivalent spaces.
+Since homotopies themselves are continuous maps of topological spaces, one can look at homotopies between homotopies and so on, and we can define some \textbf{higher homotopy groups} $\pi_2,\pi_3,\ldots$. Those groups are interesting since they are algebraic invariant of homeomorphical, or more precisely, homotopically equivalent spaces.
 \paragraph{Homotopy type theory} So, how does it relate to our type theory? At first, one could think of our types as set, like the example of $\mathbb N$ would suggest, and for instance the product type would be analogous to the product set. However, in the previous section we have seen identity types and how these types are generally speaking \textit{not} trivial (that is, every inhabitant is $\mathrm{refl}$).  Thanks to identity types, we would rather think of types as spaces as it is suggested by the following table:
 \begin{center}
 \begin{tabular}{|c|c|}
@@ -338,7 +354,7 @@ Since homotopies themselves are continuous maps of topological spaces, one can l
 The particular case where types behave like sets, as it is for the type of natural integers, is here recovered through the particular case of \textit{discrete spaces}. However, this does not make sense until we have proven some additional properties about identity types that should relate to the ones of paths in topology.
 \begin{figure}[h]
   \centering
-  \begin{tikzpicture}
+  \begin{tikzpicture}[scale=0.7]
     \draw (0,0) ellipse (3.5cm and 2cm);
     \filldraw (-2.5,0) circle (1.5pt) node [below left] {$x$};
     \filldraw (2.5,0) circle (1.5pt) node [below right] {$y$};
@@ -346,10 +362,10 @@ The particular case where types behave like sets, as it is for the type of natur
     \draw [thick, double] (0,1.152) -- (0,-1.152) node [at start, above] {$p$} node [midway, right] {$r$} node [at end, below] {$q$};
     \node (A) at (3.3,1.5) {$A$};
   \end{tikzpicture}
-  \caption{a type $A$ with points $x,y : A$, two paths $p,q: x=_A y$ and a homotopy $r : p =_{x=_A y} q$}
+  \caption{two points $x,y : A$, two paths $p,q: x=_A y$ and a homotopy $r : p =_{x=_A y} q$}
 \end{figure}
 \subsection{Paths}
-In short, we have the following correspondence in between equality types in Type Theory and paths in omotopy theory:
+In short, we have the following correspondence in between equality types in type theory and paths in homotopy theory:
 \begin{center}
 \begin{tabular}{|c|c|}
   \hline Equality & Homotopy \\
@@ -359,9 +375,11 @@ In short, we have the following correspondence in between equality types in Type
   \hline
 \end{tabular}
 \end{center}
-Let's get into a bit more details about operations on equality types, one can prove every statement within this section by easy path inductions.
-\paragraph{Symmetry} Given a path $p : x =_A y$, one has an inverse path $p^{-1} : y =_A x$ such that for any $x$, $\mathrm{refl}_x^{-1} \equiv \mathrm{refl}_x$.
-\paragraph{Transitivity} Given paths $p : x =_A y$ and $q : y =_A z$ one has a concatenated path $p \cdot q : x =_A z$ such that for any $x$, $\mathrm{refl}_x \cdot \mathrm{refl}_x \equiv \mathrm{refl}_x$.
+\begin{itemize}
+  \item \textbf{Symmetry : } Given a path $p : x =_A y$, one has an inverse path $p^{-1} : y =_A x$ such that for any $x$, $\mathrm{refl}_x^{-1} \equiv \mathrm{refl}_x$.
+  \item \textbf{Transitivity : } Given paths $p : x =_A y$ and $q : y =_A z$ one has a concatenated path $p \cdot q : x =_A z$ such that for any $x$, $\mathrm{refl}_x \cdot \mathrm{refl}_x \equiv \mathrm{refl}_x$.
+\end{itemize}
+
 
 What's crucial about the paths operations we defines is that, as it should be expected, they are well behaved up to homotopy, allthough in a type theoretic way. This is encapsulated within the following properties, that can once again be proven by path inductions (the fact that these properties hold relies on how the operations have previously been defined, more details can be found in the HoTT Book\cite{hott}).
 \begin{prop}
@@ -386,7 +404,7 @@ Now, in classical homotopy theory a \textbf{fibration} is defined as a continuou
   such that $\mathrm{pr}_1(\mathrm{lift}(p,u)) = p$.
 \end{prop}
 \begin{center}
-  \begin{tikzpicture}[scale=0.865]
+  \begin{tikzpicture}[scale=0.7]
     \draw (0,7) ellipse (4.4cm and 2.5cm);
     \draw (-1.7,7) ellipse (1.15cm and 1.05cm);
     \draw (1.7,7) ellipse (1.15cm and 1.05cm);
@@ -416,7 +434,7 @@ Under the homotopical interpretation we have seen that equalities should be unde
   $$(f \sim g) :\equiv \prod_{x : A} (f(x)=g(x))$$
 \end{mydef}
 A priori, this is \textit{not} the same as the type $f =g$. Now, let's move on to types : what exactly is an equality between types ? Firs, as types can be seen as inhabitant of a certain universe type, we do have equality types in between types themselves.
-In topology, thanks to homotopies, one can define homotopically equivalent spaces as spaces $X,Y$ with two maps $f : X \rightarrow Y$ and $g : Y \rightarrow X$ such as both their composites are homotopical to the identity maps. Allthough it would be natural, this is \textit{not} what is retained as the definition for equivalence of types, but corresponds to so called \textbf{quasi-equivalences} of types. We won't be defining equivalence of types here, but it goes along the lines of the one of quasi-equivalences. In fact, and that is what should be taken away, one can build an equivalence from a quasi-equivalence and vice-versa. We will often be building quasi-equivalences to show that two types are equivalent. We will write the type of equivalences in between $A$ and $B$ as $A \simeq B$.\\
+In topology, thanks to homotopies, one can define homotopically equivalent spaces as spaces $X,Y$ with two maps $f : X \rightarrow Y$ and $g : Y \rightarrow X$ such as both their composites are homotopical to the identity maps. Allthough it would be natural, this is \textit{not} what is retained as the definition for equivalence of types, but corresponds to so called \textbf{quasi-equivalences} of types. We won't be defining equivalence of types here, but it goes along the lines of the one of quasi-equivalences. In fact, and that is what should be taken away, one can build an equivalence from a quasi-equivalence and vice-versa. We will often be building quasi-equivalences to show that two types are equivalent. We will write the type of equivalences between $A$ and $B$ as $A \simeq B$.
 \paragraph{Univalence}
 If we talked about equivalences first, it is because they play a fundamental role in HoTT thanks to the univalence axiom. One should expect equal types to be equivalent and that is the case, meaning that we have a function: 
 $$\mathrm{idToEquiv : A = B \rightarrow} A \simeq B$$
@@ -424,7 +442,7 @@ Now, the \textbf{univalence axiom} consists in giving ourselves an arrow in the 
 $$\mathrm{ua} : A \simeq B \rightarrow A = B$$
 And moreover, $\mathrm{ua}$ is such that it is a quasi-inverse to $\mathrm{idToEquiv}$ meaning that they are at turn equivalences, hence : 
 $$(A \simeq B) \simeq  (A = B)$$
-This whole univalence axiom, proposed by \textit{Vladimir Voevodsky}, allows us to identify equivalent types, as it usually done, allthough in an informal way, in classical mathematics. 
+This whole univalence axiom, proposed by \textit{Vladimir Voevodsky}, allows us to identify equivalent types, as it usually done  allthough in an informal way, in classical mathematics. 
 \subsection{Characterizing equality types in type formers}
 We have previously seen that in a product type $A \times B$, given a path $p : x=y$, we can apply $\mathrm{pr}_1$ and $\mathrm{pr}_2$ to obtains paths $\mathrm{pr}_1(p) : \mathrm{pr}_1(x)=_A \mathrm{pr}_1(y)$ and $\mathrm{pr}_2(p) : \mathrm{pr}_2(x)=_B \mathrm{pr}_2(y)$. This allows us to define a function of type : 
 $$ (x =_{A\times B} y) \rightarrow (\mathrm{pr}_1(x)=_A \mathrm{pr}_1(y)) \times (\mathrm{pr}_2(x)=_B \mathrm{pr}_2(y))$$
@@ -442,48 +460,63 @@ $$\mathrm{apd}_f : \prod_{p : x=_A y} p_*(f(x))=f(y)$$
 \end{prop}
 Now, given a path $p :w =_{\sum_{x : A} B(x)} w'$, we can apply the (non-depedent) function $\mathrm{pr}_1$ to obtain a path $\mathrm{pr}_1(p) : \mathrm{pr}_1(w) =_A \mathrm{pr}_1(w')$, and thanks to the previous proposition and using the dependent function $\mathrm{pr}_2$, we obtain a path between $\mathrm{pr}_1(p)_*(\mathrm{pr}_2(w))$ and $\mathrm{pr}_2(w')$ lying in the fiber $B(\mathrm{pr}_1(w'))$. This, as previously seen is a path between $\mathrm{pr}_2(w)$ and $\mathrm{pr}_2(w')$ lying over the path $\mathrm{pr}_1(p)$. This allows us to define a map of type : 
 $$w=_{\sum_{x : A} B(x)} w' \rightarrow \sum_{p : (\mathrm{pr}_1(w)=_A \mathrm{pr}_1(w'))} (p_*(\mathrm{pr}_2(w))=\mathrm{pr}_2(w'))$$
-Once again, it turns out that this map is an equivalence,
-\begin{theorem}
-Let $B : A \rightarrow \mathcal{U}$ be a type family over $A$ and $w,w'$ be points of $\sum_{x : A} B(x)$, then there is an equivalence :
-$$(w=_{\sum_{x : A} B(x)} w') \simeq \sum_{p : (\mathrm{pr}_1(w)=_A \mathrm{pr}_1(w'))} (p_*(\mathrm{pr}_2(w))=\mathrm{pr}_2(w'))$$
-\end{theorem}
+Once again, it turns out that this map is an equivalence.
 This means that an equality between two points $w$ and $w'$ is given by a path $p$ in $A$ between their first components and a path from $\mathrm{pr}_2(w)$ and $\mathrm{pr}_2(w')$ in the total space lying over this specific path $p$.
 \subsection{Higher Inductive Types}
-We have already seen an example of an inductive type : $\mathbb N$. When describing \textbf{higher inductive types}, we allow ourselves to use constructors that are not only points of the type, but also paths, paths between paths and every kind of higher paths one could think of. Those are especially useful when describing some concrete topological spaces, or constructions from topological spaces. Recall that in mathematics, one can define the circle $\mathbb{S}^1$ as the interval $[0,1]$ where points $0$ and $1$ indentified. This in fact gives two examples of HITs. The first one, is the interval type $I$ given by the following description:
-\begin{itemize}
-  \item $0 : I$
-  \item $1 : I$
-  \item $\mathrm{glue} : 0=_I 1$
-\end{itemize}
-And the second one is the circle type $\mathbb{S}^1$ : 
-\begin{itemize}
-  \item $\mathrm{base} : \mathbb{S}^1$
-  \item $\mathrm{loop} : \mathrm{base} =_{\mathbb{S}^1} \mathrm{base}$
-\end{itemize}
-\begin{figure}[h]
-  \begin{center}
-    \includegraphics[height=2cm]{images/circle.png}
-    \caption{The circle as a HIT (source: \cite{hott} chapter 6)}
-  \end{center}
-\end{figure}
+We have already seen an example of an inductive type : $\mathbb N$. When describing \textbf{higher inductive types}, we allow ourselves to use constructors that are not only points of the type, but also paths, paths between paths and every kind of higher paths one could think of. Those are especially useful when describing some concrete topological spaces, or constructions from topological spaces. Recall that in mathematics, one can define the circle $\mathbb{S}^1$ as the interval $[0,1]$ where points $0$ and $1$ indentified. In terms of a HIT, $\mathbb{S}^1$ is defined by the following: \\
+\begin{minipage}{.5\linewidth}
+  \begin{itemize}
+    \item $\mathrm{base} : \mathbb{S}^1$
+    \item $\mathrm{loop} : \mathrm{base} =_{\mathbb{S}^1} \mathrm{base}$
+  \end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}{.5\linewidth}
+  \centering
+  \includegraphics[width=.75\linewidth]{images/circle.png}
+\end{minipage}
 Then, one could ask what induction principles would look like for HITs? We are able to describe induction principles on any given HIT, however, as there isn't really any generic description of what a HIT is, there is no general framework to answer this question. So, let's take a look at the case of the circle $\mathbb{S}^1$. The recursion principle for the circle states that to define a (non-dependent) map out of the circle to a type $A$ equipped with a point $a :A$ and a path $ p : a=_A a$ then there is a unique map $f : \mathbb{S}^1$ such that $f(\mathrm{base}) \equiv a$ and $\mathrm{ap}_f(\mathrm{loop}) =p$ (there is actually a case as to whether those equalities should be definitional or propositional, but we'll stick to the choice made in the HoTT book).\\
 Regarding the induction principle, things get much trickier. Let $P : \mathbb{S}^1 \rightarrow \mathcal{U}$ be a type family over the circle. To define a dependent map $f : \prod_{x : \mathbb{S}^1} P(x)$, one needs to specify its value on the base point $f(\mathrm{base}) :\equiv b : P(\mathrm{base})$. Then the question is, what should the path $\mathrm{loop} : \mathrm{base} = \mathrm{base}$ be sent to ? Well, recall $\mathrm{loop}$ induces by transport a map $\mathrm{loop}_* : P(\mathrm{base}) \rightarrow P(\mathrm{base})$ so the path $\mathrm{loop}$ should be sent to a path lying over $\mathrm{loop}$ in the fiber $P(\mathrm{base})$, and that is, according to the previous section, a path $l : b=\mathrm{loop}_*(b)$.\\
 The conclusion is then that there is a unique map $f$ of type $\prod_{x : \mathbb{S}^1} P(x)$ such that $f(\mathrm{base}):\equiv b$ and $\mathrm{apd}_f(\mathrm{loop})=l$.\\
-The induction principle is already complicated for the circle since it requires paths over paths. With bigger HITs, such as the ones we'll be defining in the work, working with their induction principle is a major struggle. Let's now illustrate a few useful constructions using HITs:
+The induction principle is already complicated for the circle since it requires paths over paths. With bigger HITs, such as the ones we'll be defining later on, working with their induction principle can actually become a major struggle. Let's now illustrate a few useful constructions using HITs:
 \begin{itemize}
-  \item \textbf{(Homotopy) Pushouts} : Suppose given types $A,B,C$ as well as maps $f : C \rightarrow A$ and $g : C \rightarrow B$. We define its \textbf{pushout} type $A \sqcup_C B$ as the following HIT:
-    \begin{itemize}
-      \item $\mathrm{inl} : A \rightarrow A \sqcup_C B$
-      \item $\mathrm{inr} : B \rightarrow A \sqcup_C B$
-      \item $\mathrm{glue} : \prod_{c : C} \mathrm{inl}(f(c))=\mathrm{inr(g(c))}$
-    \end{itemize}
+  \item \textbf{(Homotopy) Pushouts} : Suppose given types $A,B,C$ as well as maps $f : C \rightarrow A$ and $g : C \rightarrow B$. We define its \textbf{pushout} type $A \sqcup_C B$ as the following HIT:\\\\
+    \begin{minipage}{.5\textwidth} 
+      \begin{itemize}
+        \item $\mathrm{inl} : A \rightarrow A \sqcup_C B$
+        \item $\mathrm{inr} : B \rightarrow A \sqcup_C B$
+        \item $\mathrm{glue} : \prod_{c : C} \mathrm{inl}(f(c))=\mathrm{inr(g(c))}$
+      \end{itemize}
+    \end{minipage}
+    \hfill 
+    \begin{minipage}{.5\textwidth} 
+      \begin{center}
+        \begin{tikzcd}
+          C \arrow[d, "f"'] \arrow[r, "g"] & B \arrow[d, "\mathrm{inr}"] \arrow[ld, "\mathrm{glue}" description, Rightarrow] \\
+          A \arrow[r, "\mathrm{inl}"']     & A\sqcup_C B                                                                    
+          \end{tikzcd}
+        \label{fig:pushoutquare}
+      \end{center}
+    \end{minipage}
   The pushout of $A$ and $B$ over the empty type yields the usual coproduct type. This type should be thought of as the disjoint union of $A$ and $B$ where elements coming from the same point $c : C$ are identified (homotopically speaking).
-  \item \textbf{(Homotopy) Coequalizers} Given types $B,A$ and maps $f,g : B \rightarrow  A$ the (homotopy) \textbf{coequalizer} type $\mathrm{CoEq(f,g)}$ is given by the HIT:
+  \item \textbf{(Homotopy) Coequalizers} Given types $B,A$ and maps $f,g : B \rightarrow  A$ the (homotopy) \textbf{coequalizer} type $\mathrm{CoEq(f,g)}$ is given by the HIT:\\\\
+  \begin{minipage}{.5\textwidth} 
     \begin{itemize}
       \item $c : A \rightarrow \mathrm{CoEq(f,g)}$
-      \item $p : \prod_{a : A} c(f(a))=c(g(a))$
+      \item $p : \prod_{b : B} c(f(b))=c(g(b))$
     \end{itemize}
-    Taking $A$ and $B$ to be the unit types with one element $1$ and $f,g$ to be the canonical maps that send $1$ to $1$ their coequalizer is given by a type with a point $c(1)$ and a path from $c(1)$ to $c(1)$ : we recover the definition of the circle $\mathbb{S}^1$ !
+  \end{minipage}
+  \hfill 
+  \begin{minipage}{.5\textwidth} 
+    \begin{center}
+      \begin{tikzcd}
+        B \arrow[r, "f"', shift right] \arrow[r, "g", shift left=2] & A \arrow[r, "c"] & {\mathrm{CoEq}(f,g)}
+      \end{tikzcd}
+      \label{fig:coequalizer}
+    \end{center}
+  \end{minipage}
+  \\
+  Taking $A$ and $B$ to be the unit types with one element $1$ and $f,g$ to be the canonical maps that send $1$ to $1$ their coequalizer is given by a type with a point $c(1)$ and a path from $c(1)$ to $c(1)$ : we recover the definition of the circle $\mathbb{S}^1$ !
 \end{itemize}
 \begin{mydef}[Propositions and Sets]
   A type $A : \mathcal{U}$ is a proposition if : 
@@ -527,7 +560,7 @@ Then there is a unique path $s : c = d$ filling the square by making it commute.
 All the expected equations around those path operations hold but we won't be looking at it in any more details. Let's also remark that for a function $f : A \rightarrow B$ and a path in $A$ $p: I \rightarrow A$, by composing we obtain a path $f \circ p : I \rightarrow B$ from $f(p(i_0))$ to $f(p(i_1))$ in $B$, easily recovring the definition of $\mathrm{ap}_f$ in HoTT. In cubical agda, the notation $\mathrm{cong}$ is used rather than $\mathrm{ap}_f$. \\
 Let's go back to the general case of the type $\mathrm{PathP} \hspace{2pt} P \hspace{2pt} x \hspace{2pt} y$ where $P$ isn't necessarily a constant type family. Here $P$ is indeed a path in between the types $P(i_0)$ and $P(i_1)$ by definition. Hence, as in HoTT, it should induce a map $P(i_0) \rightarrow P(i_1)$ (much like transport) and so the type $\mathrm{PathP} \hspace{2pt} P \hspace{2pt} x \hspace{2pt} y$ should be thought as the equivalent of the type "$P_*(x)=_{P(i_1)} y$" (allthough this is clearly an abusive notation). Setting $P$ to be a constant type family, we recover what we said in the previous paragraph.
 \paragraph{Squares and cubes} We have already encountered a square with the filling property. In fact, squares and cubes play a huge role in cubical type theory. \\
-Given a type $A$, a square is given by a commutative square of paths in $A$ : 
+Given a type $A$, a filled square is given by a commutative square of paths in $A$ : 
 \begin{center}
   \begin{tikzcd}
     {a_{0,1}} \arrow[r, "s"]                & {a_{1,1}}                 \\
@@ -545,8 +578,8 @@ If $c$ is an element of such a square type than as $i$ varies along $I$, $c \hsp
     i_0 \arrow[rr, bend right]                                           & i                                             & i_1                                                 
     \end{tikzcd} 
 \end{center}
-In fact having this element $c$ is tantamount to "filling the square". Let's illustrate with the example of the two dimensional torus.
-\paragraph{The Torus $\mathbb{T}^2$} In classical mathematics, the torus $\mathbb{T}^2$ would be defined as the square $[0,1]\times[0,1]$ were the opposite edges are identified. It can be given the following abstract representation as a \textbf{cell complex}(we'll talk about them  later on):
+In fact having this element $c$ is tantamount to "filling the square", the interior lines corresponding to the formal paths $c i$ for $i$ ranging in $I$. Let's illustrate it with the example of the two dimensional torus.\\ 
+In classical mathematics, the torus $\mathbb{T}^2$ would be defined as the square $[0,1]\times[0,1]$ were the opposite edges are identified. It can be given the following abstract representation as a \textbf{cell complex}(we'll talk about them  later on):
 \begin{figure}[h]
   \begin{center}
     \includegraphics[height= 2.5cm]{torus.png}
