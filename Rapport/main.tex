@@ -521,7 +521,7 @@ The induction principle is already complicated for the circle since it requires 
     \end{center}
   \end{minipage}
   \\
-  Taking $A$ and $B$ to be the unit types with one element $1$ and $f,g$ to be the canonical maps that send $1$ to $1$ their coequalizer is given by a type with a point $c(1)$ and a path from $c(1)$ to $c(1)$ : we recover the definition of the circle $\mathbb{S}^1$ !
+  Taking $A$ and $B$ to be the unit types \textbf{1} with one element $*$ and $f,g$ to be the canonical maps that send $*$ to $*$ their coequalizer is given by a type with a point $c(*)$ and a path from $c(*)$ to $c(*)$ : we recover the definition of the circle $\mathbb{S}^1$ !
 \end{itemize}
 \begin{mydef}[Propositions and Sets]
   A type $A : \mathcal{U}$ is a proposition if : 
@@ -686,6 +686,29 @@ And this is a presentation of the quaternion group.
     \end{itemize}
   \end{minipage}
 \end{proof}
+\section{A first fiber calculation}
+For the rest of the report we will be interested in calculating fibers of some maps. Let's begin with a definition : 
+\begin{mydef}
+  let $f : A \rightarrow B$ be a map and $b : B$, we define the fiber of $f$ over $b$ by : 
+  $$\mathrm{fib}_f(b) \hspace{3pt} :\equiv \sum_{x: A} f(x)=_B b$$
+\end{mydef}
+An interesting way to see the fiber of a map is via a pullback square \ref{fig:pullbacksquare}. For $b :B$ let $b_*$ be the map $\mathbf{1} \rightarrow B$ sending the canonical element $*$ to $b$. The the pullback of $f$ and $b_*$ is equivalent to the $\mathrm{fib}_f(b)$ : 
+\begin{center}
+  \begin{tikzcd}
+    \mathrm{fib}_f(b) \arrow[d] \arrow[r] & \textbf{1} \arrow[d, "b_*"] \\
+    A \arrow[r, "f"']                                                  & B               
+  \end{tikzcd}
+\end{center}
+This follows from the calculation : 
+\begin{align}
+A \times_B \textbf{1} :&= \sum_{x :A} \sum_{y : \textbf{1}} f(x)=b_*(y)\\
+&\simeq \sum_{x : A} f(x)=b_*(*) \text{\quad \quad (this follows from the type \textbf{1} being uniquely inhabited, see \cite{hott})}\\
+:&=\mathrm{fib}_f(b)
+\end{align}
+Let $m$ be a nonnegative integer and $r \in \big (\mathbb Z / m\mathbb Z\big )^{\times}$. Then we have a short exact sequence of groups : 
+$$\mathbb{Z} \xrightarrow{\times m} \mathbb{Z} \xrightarrow{1 \mapsto \overline r} \mathbb Z / m\mathbb Z$$
+Which yields another short exact sequence : 
+
 \printbibliography
 
 \end{document}
