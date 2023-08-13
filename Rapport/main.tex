@@ -571,6 +571,7 @@ Given a type $A$, a filled square is given by a commutative square of paths in $
     {a_{0,1}} \arrow[r, "s"]                & {a_{1,1}}                 \\
     {a_{0,0}} \arrow[u, "p"] \arrow[r, "r"] & {a_{1,0}} \arrow[u, "q"']
     \end{tikzcd}
+    \label{fig:squarecommute}
 \end{center}
 Which means that $\boxed{p \cdot s \equiv r \cdot q}$. The type of such squares in cubical agda is defined as the following : 
 $$\text{Square $p$ $q$ $r$ $s$ $:\equiv$ PathP $\big(\lambda i \mapsto (r(i) \equiv s(i))\big)$ $p$ $q$}$$
@@ -640,7 +641,7 @@ is tantamount to having a relation $p \cdot s \equiv r \cdot q$. The latter can 
 This allows us to define a quarter of a turn rotation operation on squares (where $\overline{p}$ denotes path inversion in cubical agda): 
 $$\text{rot : Square $p$ $q$ $r$ $s$ $\rightarrow$ Square $\overline{r}$ $\overline{s}$ $q$ $p$}$$
 This function can be synthetically defined as the following : $\boxed{\text{rot sq $i$ $j$ $:\equiv$ sq $(\sim j)$ $i$}}$. This map is naturally a quasi equivalence since $\mathrm{rot}^4\equiv \mathrm{Id}$, and its inverse is a quarter turn rotation in the other direction.\\
-We now have every ingredient to define the hypercubic manifold. Let's first choose the orientation of our paths, $r^E$ and $b^E$ are chosen to be from $w^V$ to $b^V$ and $y^E$,$g^E$ are chosen to be in the other direction. Having chosen this direction, taking a look at the cubical documentation \cite{cubicalagda} (in Foundations/Prelude.agda) gives us the convention for filling cubes in agda, leading us to the following HIT:
+We now have every ingredient to define the hypercubic manifold. Let's first choose the orientation of our paths, which will all go from $w^V$ to $b^V$. Having chosen this direction, taking a look at the cubical documentation \cite{cubicalagda} (in Foundations/Prelude.agda) gives us the convention for filling cubes in agda, leading us to the following HIT:
 \begin{figure}[h]
   \begin{center}
     \includegraphics[height= 4.5cm]{images/Agda - VH.png}
@@ -648,13 +649,42 @@ We now have every ingredient to define the hypercubic manifold. Let's first choo
     \label{fig:H1Magda}
   \end{center}
 \end{figure}\\
-We shall now recover a known result about the fundamental group of the hypercubic manifold that we will denote by $\mathbb{HM}^1$ from now on. 
+Having defined this HIT, if it is indeed the hypercubic manifold we shall now be able to recover a known result about its fundamental group. We will denote the hypercubic manifold by $\mathbb{HM}^1$ from now on.
 \begin{theorem}
   We have that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ where $\mathcal{Q}$ is the quaternion group.
 \end{theorem}
-Before proving this claim we shall be taking a bit about \textbf{cell complexes} that we have first seen in \ref{fig:torus}. A cell complex is a topological space built inductively by successively attaching $0$-cells (points), $1$-cells (paths) and so on. In little dimensions, one can give them an abstract presentation as the one of the torus. The way these spaces are built should remind of higher inductive types, where one specifies some point constructors ($0$-paths), then path constructors ($1$-paths) and so on. In the section 6.6 of the HoTT book \cite{hott} one can find a bit more details about how a cell complex can be converted into a HIT. The idea is that attaching $n$-cells can be done by specifiying algebraic relations (such as $p \cdot q = q \cdot p$ for the torus) on lower dimensional constructors. It appears that the represenation of $\mathbb{HM}^1$ in \ref{fig:H1M} is also a cell-complex representation and that the cubical definition in \ref{fig:H1Magda} is precisely its conversion into a HIT.\\
-Now, in classical homotopy theory the fact that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ is well known and follows from a corollary of the \textbf{Seifert Van Kampen} theorem, stating that the fundamental group of a cell complex is given by the fundamental group of its $2$-skeleton (that is the complex where all cells of dimensions $>2$ are removed), more details can be found in \cite{hypercubic} and \cite{FundamentalCellComplex}. All we want to do here is check that the HIT we defined has the correct fundamental Then it can be shown that the fundamental group of a cell complex with one $0$-cell is given by the presentation $\langle S \hspace{2pt} \vert\hspace{2pt} R \rangle$ where you have one generator in $S$ for every $1$-cell and one relation for any $2$-cell.\\
-Now, the relations that the $2$-cells should give are precisely the one used when you convert a cell complex into a HIT so we can indeed chack that the fundamental group of \ref{fig:H1Magda} is $\mathcal{Q}$ as it should be the case. 
+All we want to do here is check that the HIT we defined has the correct fundamental group out of curiosity.\\
+Before proving this claim we shall be taking a bit about \textbf{cell complexes} that we have first seen in \ref{fig:torus}. A cell complex is a topological space built inductively by successively attaching $0$-cells (points), $1$-cells (paths) and so on. In little dimensions, one can give them an abstract presentation as the one of the torus \ref{fig:torus}. The way these spaces are built should remind of higher inductive types, where one specifies some point constructors ($0$-paths), then path constructors ($1$-paths) and so on. In the section 6.6 of the HoTT book \cite{hott} one can find a bit more details about how a cell complex can be converted into a HIT. The idea is that attaching $n$-cells can be done by specifiying algebraic relations (such as $p \cdot q = q \cdot p$ for the torus) on lower dimensional constructors. It appears that the represenation of $\mathbb{HM}^1$ in \ref{fig:H1M} is also a cell-complex representation and that the cubical definition in \ref{fig:H1Magda} is precisely its conversion into a HIT.\\
+Now, in classical homotopy theory the fact that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ is well known and follows from a corollary of the \textbf{Seifert Van Kampen} theorem, stating that the fundamental group of a cell complex is given by the fundamental group of its $2$-skeleton (that is the complex where all cells of dimensions $>2$ are removed), more details can be found in \cite{hypercubic} and \cite{FundamentalCellComplex}. Then it can be shown that the fundamental group of a cell complex with one $0$-cell is given by the presentation $\langle S \hspace{2pt} \vert\hspace{2pt} R \rangle$ where you have one generator in $S$ for every $1$-cell and one relation for any $2$-cell.\\
+Now, the relations that the $2$-cells should give are precisely the one used when you convert a cell complex into a HIT so we can indeed chack that the fundamental group of \ref{fig:H1Magda} is $\mathcal{Q}$ as it should be the case.\\
+This verification took a little more time than expected during the internship because we had forgotten that the previous theorem applies to HITs with only on point constructors (the struggles and details are a bit clearer in the notes \cite{QuaternionPresentation}). The HIT in \ref{fig:H1Magda} gives us \textit{a priori} 4 generators $y,g,r,b$ (for the 4 paths constructors) and 3 relations (from the 3 filled squares that are tantamount to a commuting relation on paths, see \ref{fig:squarecommute}). Following that, the presentation we obtained for the fundamental group of $\mathbb{HM}^1$ was the following (details can be found in the notes \cite{QuaternionPresentation}, but some generators are inversed in this presentation and some relations have beeen rewritten from the ones you'd get directly):
+$$ \pi_1(\mathbb{HM}^1) = \langle r,g,b,y \quad \vert \quad by=rg, bgry=1, gb = yr \rangle$$
+However this is wrong, as stated before, because we were working with two point constructors. The solution is to get back to one point constructor by contracting one of the path constructors, we choose to contract the yellow edge. This indeed yields the presentation : 
+$$ \pi_1(\mathbb{HM}^1) = \langle r,g,b \quad \vert \quad b=rg, bgr=1, gb = r \rangle$$
+And this is a presentation of the quaternion group.
+\begin{proof} The usual presentation for the quaternion group is given by : 
+  $$\mathcal{Q}  = \langle e,i,j,k \quad \vert \quad i^2 =e, j^2=e, k^2=e, ijk=e, e^2=1 \rangle$$
+  (If you are familiar with the usual quaternions, in this presentation $e$ should be thought as playing the role as $-1$).
+  Now we have to build a presentation isomorphism to show that these two groups are the same. In \cite{QuaternionPresentation}, my advisor suggested to use his tool that generates the \textbf{Knuth-Bendix} completion of a rewritting system to see what algebraic relations we could deduce from the presentation of $\pi_1(\mathbb{HM}^1)$. From those relations, it appears that $r,g,b$ are elements of order $4$, and so they should naturally identify to $k,j,i$, but since $bgr=1$ and $ijk=e(=-1)$, it is needed to identify one of the generators with the "opposite" of the other. The opposite is given by multiplying by an element of order $2$, so since $b$ is of order $4$ in $\pi_1(\mathbb{HM}^1)$, $bb$ is of order 2 and so can be used (non-canonically) to represent the minus sign. This yields to defining the following group isomorphisms (defining them actually involves a bit more precautions but we won't be getting into details here):\\\\
+  \begin{minipage}{.5\textwidth} 
+    $f : \pi_1(\mathbb{HM}^1) \rightarrow \mathcal{Q}$
+    \begin{itemize}
+      \item $f(r) := k$
+      \item $f(g) := j$
+      \item $f(b) :=ei$
+    \end{itemize}
+  \end{minipage}
+  \hfill 
+  \begin{minipage}{.5\textwidth} 
+    $h : \mathcal{Q} \rightarrow \pi_1(\mathbb{HM}^1)$
+    \begin{itemize}
+      \item $h(i) := bbb$
+      \item $h(j) := g$
+      \item $h(k) := r$
+      \item $h(e) :=bb$
+    \end{itemize}
+  \end{minipage}
+\end{proof}
 \printbibliography
 
 \end{document}
