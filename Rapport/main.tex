@@ -611,7 +611,7 @@ And thanks to square types in cubical theory we can also give the following defi
 \end{lstlisting}
 Similarly, one can complete cubes in cubical type theory, but the structures involved quickly gain in complexity (but we shall look at such cubes later on).
 \chapter{The Hypercubic manifold} 
-In this part, we'll cover the work done during the internship. The formalized proofs and attempts of proofs can be found on the following GitHub repository \cite{repo}.
+In this part, we'll cover the work done during the internship. The formalized proofs and attempts of proofs can be found on the following GitHub repository \cite{repo}. Section 5 comes from my own work during the internship. Section 6 is just a check we made during the internship about the coherence of section 5, so it contains no new result. Section 7 was a more in depth calculation of a side question my advisors had on a object they are working and that is a starting point for the calcualtions that were to come afterwards. Section 8 contains personal work from the internship that is not yet completed but was the second goal of the internship (after section 5).
 \section{Defining the hypercubic manifold}
 The first part of the work was to give a formalized definition of the \textbf{hypercubic manifold}. As previously stated, this manifold can be obtained as the adjunction space of a 3-dimensional hypercub where opposite sides are identified with a quarter turn rotation. This is best illustrated in the following video \cite{VHvideo}. At the end of the day, it can be presented as the following object (illustration taken from \cite{hypercubic}):
 \begin{figure}[h]
@@ -650,6 +650,7 @@ We now have every ingredient to define the hypercubic manifold. Let's first choo
   \end{center}
 \end{figure}\\
 Having defined this HIT, if it is indeed the hypercubic manifold we shall now be able to recover a known result about its fundamental group. We will denote the hypercubic manifold by $\mathbb{HM}^1$ from now on.
+\section{The fundamental group of $\mathbb{HM}^1$}
 \begin{theorem}
   We have that $\pi_1(\mathbb{HM}^1)=\mathcal{Q}$ where $\mathcal{Q}$ is the quaternion group.
 \end{theorem}
@@ -664,7 +665,7 @@ $$ \pi_1(\mathbb{HM}^1) = \langle r,g,b \quad \vert \quad b=rg, bgr=1, gb = r \r
 And this is a presentation of the quaternion group.
 \begin{proof} The usual presentation for the quaternion group is given by : 
   $$\mathcal{Q}  = \langle e,i,j,k \quad \vert \quad i^2 =e, j^2=e, k^2=e, ijk=e, e^2=1 \rangle$$
-  (If you are familiar with the usual quaternions, in this presentation $e$ should be thought as playing the role as $-1$).
+  (If you are familiar with the usual quaternions, in this presentation $e$ should be thought of  playing the role of $-1$).
   Now we have to build a presentation isomorphism to show that these two groups are the same. In \cite{QuaternionPresentation}, my advisor suggested to use his tool that generates the \textbf{Knuth-Bendix} completion of a rewritting system to see what algebraic relations we could deduce from the presentation of $\pi_1(\mathbb{HM}^1)$. From those relations, it appears that $r,g,b$ are elements of order $4$, and so they should naturally identify to $k,j,i$, but since $bgr=1$ and $ijk=e(=-1)$, it is needed to identify one of the generators with the "opposite" of the other. The opposite is given by multiplying by an element of order $2$, so since $b$ is of order $4$ in $\pi_1(\mathbb{HM}^1)$, $bb$ is of order 2 and so can be used (non-canonically) to represent the minus sign. This yields to defining the following group isomorphisms (defining them actually involves a bit more precautions but we won't be getting into details here):\\\\
   \begin{minipage}{.5\textwidth} 
     $f : \pi_1(\mathbb{HM}^1) \rightarrow \mathcal{Q}$
