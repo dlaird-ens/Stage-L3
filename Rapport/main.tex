@@ -27,6 +27,8 @@
 \usepackage{titlesec}
 \usepackage{listings}
 \usepackage{multirow}
+\usepackage{scalerel}
+\DeclareMathOperator*{\bigplus}{\scalerel*{+}{\sum}}
 \usepackage{tikz-cd}
 \usetikzlibrary{patterns.meta}
 \usepackage{hyperref}
@@ -692,7 +694,7 @@ For the rest of the report we will be interested in calculating fibers of some m
   let $f : A \rightarrow B$ be a map and $b : B$, we define the fiber of $f$ over $b$ by : 
   $$\mathrm{fib}_f(b) \hspace{3pt} :\equiv \sum_{x: A} f(x)=_B b$$
 \end{mydef}
-An interesting way to see the fiber of a map is via a pullback square \ref{fig:pullbacksquare}. For $b :B$ let $b_*$ be the map $\mathbf{1} \rightarrow B$ sending the canonical element $*$ to $b$. The the pullback of $f$ and $b_*$ is equivalent to the $\mathrm{fib}_f(b)$ : 
+An interesting way to see the fiber of a map is via a pullback square \ref{fig:pullbacksquare}. For $b :B$ let $b_*$ be the map $\mathbf{1} \rightarrow B$ sending the canonical element $*$ to $b$. The the pullback of $f$ and $b_*$ is equivalent to the fiber $\mathrm{fib}_f(b)$ : 
 \begin{center}
   \begin{tikzcd}
     \mathrm{fib}_f(b) \arrow[d] \arrow[r] & \textbf{1} \arrow[d, "b_*"] \\
@@ -701,14 +703,62 @@ An interesting way to see the fiber of a map is via a pullback square \ref{fig:p
 \end{center}
 This follows from the calculation : 
 \begin{align}
-A \times_B \textbf{1} :&= \sum_{x :A} \sum_{y : \textbf{1}} f(x)=b_*(y)\\
+A \times_B \textbf{1} :
+&\equiv \sum_{x :A} \sum_{y : \textbf{1}} f(x)=b_*(y)\\
 &\simeq \sum_{x : A} f(x)=b_*(*) \text{\quad \quad (this follows from the type \textbf{1} being uniquely inhabited, see \cite{hott})}\\
-:&=\mathrm{fib}_f(b)
+:&\equiv\mathrm{fib}_f(b)
 \end{align}
-Let $m$ be a nonnegative integer and $r \in \big (\mathbb Z / m\mathbb Z\big )^{\times}$. Then we have a short exact sequence of groups : 
-$$\mathbb{Z} \xrightarrow{\times m} \mathbb{Z} \xrightarrow{1 \mapsto \overline r} \mathbb Z / m\mathbb Z$$
-Which yields another short exact sequence : 
-
+Let $m$ be a nonnegative integer and $r \in \mathbb{Z}_m^{\times}$ (the integers mod $m$). Then we have a short exact sequence of groups : 
+$$\mathbb{Z} \xrightarrow{\times m} \mathbb{Z} \xrightarrow{1 \mapsto \overline r} \mathbb Z_m$$
+Which yields another short exact sequence (using the fact that $\mathbb{S}^1 = \mathrm{B} \mathbb Z$):
+$$\mathbb{S}^1 \xrightarrow{\mathrm{base} \mapsto \mathrm{base}} \mathbb{S}^1 \xrightarrow{1 \mapsto \overline r} \mathrm{B}\mathbb{Z}_m$$
+If $P : \mathrm{B}\mathbb{Z}_m \rightarrow \mathcal{U}$ is defined by $P :\equiv x \mapsto s_m = x$ then we have a fibration over $\mathbb{S}^1$ given by $P \circ g$ whose total space is by definition:
+$$\sum_{x : \mathbb{S}^1} P \circ g (x) :\equiv \sum_{x : \mathbb{S}^1}(g(x)=s_m) :\equiv \mathrm{fib}_f(s_m)$$ 
+Now, as $\mathbb{S}^1$ is defined by the coequalizer diagram \ref{fig:coequalizer} :
+\begin{center}
+  \begin{tikzcd}
+    1 \arrow[r, shift left] \arrow[r, shift right] & 1 \arrow[r, "\mathrm{base}"] & \mathbb{S}^1
+  \end{tikzcd}
+\end{center}
+We obtain the following commuting diagram : 
+\begin{center}
+  \begin{tikzcd}
+    1 \arrow[r, shift left] \arrow[r, shift right] & 1 \arrow[r, "\mathrm{base}"] \arrow[rd, "s_m =s_m"'] & \mathbb{S}^1 \arrow[r, "g"] \arrow[d, "P \circ g" description] & \mathrm{B} \mathbb{Z}_m \arrow[ld, "P"'] \\
+                                                   &                                                      & \mathcal U                                                     &                                         
+  \end{tikzcd}
+\end{center}
+So, we went from calculating the fiber of a map to calculating the total space of a fibration over a space which is defined as a coequalizer. This is convenient since we have a lemma that allows us to calculate total spaces of fibrations over coequalizers in a nice way : 
+\begin{prop}[Flattening Lemma]
+  Suppose given a fibration over a coequalizer type: 
+  \begin{center}
+    \begin{tikzcd}
+      B \arrow[r, "f", shift left] \arrow[r, "g"', shift right] & A \arrow[r, "c"] & W \arrow[r, "P"] & \mathcal U
+    \end{tikzcd}
+  \end{center}
+  Then, one has a coequalizer diagram between the total spaces: 
+  \begin{center}
+    \begin{tikzcd}
+      \sum_{x : B} P \circ c \circ f (x) \arrow[rrr, "{(b,x) \mapsto(g(b),p_b^*(x))}", shift left=3] \arrow[rrr, "{(b,x) \mapsto (f(b),x)}"', shift right=3] &  &  & \sum_{x : A} P \circ c (x) \arrow[rr, "{(a,x) \mapsto(c(a),x)}"] &  & \sum_{x : W} P(x)
+    \end{tikzcd}
+  \end{center}
+\end{prop}
+In our case, the lemma yields the following coequalizer diagram :
+\begin{center}
+\begin{tikzcd}
+  s_m=s_m \arrow[rr, "\mathrm{Id}", shift left] \arrow[rr, "p \mapsto p^r"', shift right] &  & s_m=s_m \arrow[r] & \mathrm{fib}_g(s_m)
+\end{tikzcd}
+\end{center}
+Given that $(s_m = s_m) \simeq \mathrm{Fin} \hspace{2pt} m$ (the type with $m$ elements), we get that $\mathrm{fib}_g(s_m)$ is equivalent to the HIT $W$ defined by the following constructors : 
+\begin{itemize}
+  \item $c : \mathrm{Fin} \hspace{2pt} m \mapsto W$
+  \item $ p : \prod_{x : \mathrm{Fin}\hspace{2pt} m} (c(x) = c(s_m^r(x)))$
+\end{itemize}
+Since $r$ is coprime to $m$, it turns out that $s_m^r$ is of order $m$ so the orbit of $c(0)$ under the action of the group $\langle s_m^r \rangle$ is the whole type $W$, taking the example of $r=1$ one gets the following type : \\
+And this is equivalent to the circle $\mathbb{S}^1$. By univalence we then have :
+$$\boxed{\mathrm{fib}_g(s_m) = \mathbb{S}^1}$$
+We won't be looking at the proof of the equivalence in details (it can be found in annexe here), but the idea is that the general case should come from the case $r=1$, and for $r=1$, we have that $p_0 \cdot p_1 \cdot \ldots \cdot p_m : c(0)=c(0)$ and we can successively contract each path $p_i : c(i)\rightarrow c(\overline{i+1}_r)$, to end up with a type with a constructor $c(0)$ and a path $p_0 : c(0) = c(0)$, which is the circle. \\
+I also proved an extension of this result (still in the annex) to the case where $r$ and $m$ are not coprime. In that case, let $\delta$ be the $\gcd$ of $r$ and $m$, then $s_m^r$ is now only of order $\frac m{\delta}$, and so our type is composed of $\delta$ disjoint orbits of size $\frac m{\delta}$, each orbit looking like the types we were previously looking at. We then naturally obtain : 
+$$\boxed{\mathrm{fib}_g(s_m) = \bigplus_{i=1}^{\delta} \mathbb{S}^1}$$
 \printbibliography
 
 \end{document}
