@@ -156,9 +156,9 @@
 \tableofcontents
 \section{Introduction}
 \textbf{Homotopy Type Theory} (which I will often refer to as \textbf{HoTT} in this report) is a new field in mathematics and computer science, at the crossroad of \textbf{Type Theory}, \textbf{Homotopy Theory} and the \textbf{Foundations of Mathematics}. It is based upon a homotopical interpretation of \textbf{Martin-Löf's Type Theory}, with the addition of the \textbf{Univalence Axiom} and \textbf{Higher Inductive Types}, that allow one to proceed with univalent mathematics and doing homotopy theory within the synthetic framework of type theory.\\
-The univalence axiom roughly states that equal types are precisely equivalent types (this will be made clearer later on). However, as it is often the case with type theory, we are interested in the computability of our system, and it appears that the univalence axiom does note compute. This is one of the motivation for the introduction of \textbf{Cubical type theory}, that gives a constructive interpretation of the univalence axiom.\\
-The goal of this internship was to give a definition of the \textbf{hypercubic manifold} \cite{hypercubic} in HoTT/cubical type theory using the agda proof assistant and the cubical agda library \cite{cubicalagda} and to prove some further results about it.\\
-Homotopy type theory being a very atypical theory, it comes with a lot of new definitions, ideas and concepts. This makes it hard to summarize both the basic theory needed for the internship (roughly speaking, chapters 1,2,3,4,6,8 of the \textbf{HoTT Book} \cite{hott}) as well as the content of the internship itself in 20 pages. For that reason, \textbf{this report will feature an important work of summarization of both basic and more advanced topics in HoTT} (however many details and important results will be overlooked due to the little space), and the work I did myself during the internship might not take up the most important chunk of space in this report. All the formalized results, and attempts, obtained during the internship can be found on this github repository \cite{repo}. This report wil be divided into 2 sections, the first one introducing the required HoTT concepts, and the second one tackling what was made during the internship.
+However, as it is often the case with type theory, we are interested in the computability of our system, and it appears that the univalence axiom does not compute. This is one of the motivation for the introduction of \textbf{Cubical type theory}, that gives a constructive interpretation of the univalence axiom.\\
+The goal of this internship was to give a definition of the \textbf{hypercubic manifold} \cite{hypercubic} in HoTT/cubical type theory using the agda proof assistant and the cubical agda library \cite{cubicalagda} and to prove some further results about it that should evenutally lead to the definition of a \textbf{cellular delooping of the quaternion group} $\mathcal Q$ (I will explain why this is of interest in Part 2).\\
+Homotopy type theory being a very atypical theory, it comes with a lot of new definitions, ideas and concepts. This makes it hard to summarize both the basic theory needed for the internship (roughly speaking, chapters 1,2,3,4,6,8 of the \textbf{HoTT Book} \cite{hott}) as well as the content of the internship itself in 20 pages. For that reason, \textbf{this report (Part 1) will feature an important work of summarization of both basic and more advanced topics in HoTT} (however many details and important results will be overlooked due to the little space), and the work I did myself during the internship might not take up the most important chunk of space in this report (Part 2). All the formalized results, and attempts, obtained during the internship can be found on this github repository \cite{repo}. This report wil be divided into 2 sections, the first one introducing the required HoTT concepts, and the second one tackling what was made during the internship.
 \chapter{Pre-requesites}
 The following part is aimed at giving a sufficent background for one to be able to understand the material from the internship. The presentation is very much inspired from the \textbf{HoTT Book} \cite{hott}. 
 \begin{comment}
@@ -544,7 +544,7 @@ It appears that $A$ is a set if and only if for any $a,b :A$ we have $\mathrm{is
 \begin{mydef}[Loop space]
   Given a pointed type $(A,a)$ its \textbf{loop space} $\Omega(A,a)$ is defined as the pointed type $(a=_Aa,\mathrm{refl_a})$. 
 \end{mydef}
-However, this loop space isn't necessarily a set since paths between paths have no reason to be all homotopical. In fact it has much richer structure of $\infty$-groupoid. Briefly, this means that it contains all sort of $n$-dimensional paths (that is paths between paths between paths...), that at a certain level $n$ one has group operations between $n$-dimensional paths that hold up to homotopy at the $n+1$ level. To get the group object we want we just need to take the set-truncation and it will have a group structure inherited from the quasi group structure at the first level of the loop space:
+However, this loop space isn't necessarily a set since paths between paths have no reason to be all homotopical. This loop space however still has a group structre (that we have already seen previously with the operations on paths). In fact it has a much richer structure of an $\infty$-groupoid. Briefly, this means that it contains all sort of $n$-dimensional paths (that is paths between paths between paths...), that at a certain level $n$ one has group operations between $n$-dimensional paths that hold up to homotopy at the $n+1$ level. To get the group object we want we just need to take the set-truncation of this space and it will have a group structure inherited from the group structure of the loop space, aswell as being a set.
 \begin{mydef}[Fundamental Group]
   The \textbf{fundamental group} of $A$ based at $a$ is defined by $\pi_1(A,a) :\equiv ||\Omega(A,a)||_0$.
 \end{mydef}
@@ -613,7 +613,8 @@ And thanks to square types in cubical theory we can also give the following defi
 \end{lstlisting}
 Similarly, one can complete cubes in cubical type theory, but the structures involved quickly gain in complexity (but we shall look at such cubes later on).
 \chapter{The Hypercubic manifold} 
-In this part, we'll cover the work done during the internship. The formalized proofs and attempts of proofs can be found on the following GitHub repository \cite{repo}. Section 5 comes from my own work during the internship. Section 6 is just a check we made during the internship about the coherence of section 5, so it contains no new result. Section 7 was a more in depth calculation of a side question my advisors had on a object they are working and that is a starting point for the calcualtions that were to come afterwards. Section 8 contains personal work from the internship that is not yet completed but was the second goal of the internship (after section 5).
+In this part, we'll cover the work around the \textbf{hypercubic manifold} done during the internship. The formalized proofs and attempts of proofs can be found on the following GitHub repository \cite{repo}. \\
+Section 5 comes from my own work during the internship. Section 6 is just a check we made during the internship about the coherence of section 5, so it contains no new result. Section 7 was a more in depth calculation of a side question my advisors had on a object they are working on and that is a good starting point for the calcualtions that were to come afterwards. Section 8 contains personal work from the internship that is not yet completed but was the second goal of the internship (after the result in section 5).
 \section{Defining the hypercubic manifold}
 The first part of the work was to give a formalized definition of the \textbf{hypercubic manifold}. As previously stated, this manifold can be obtained as the adjunction space of a 3-dimensional hypercub where opposite sides are identified with a quarter turn rotation. This is best illustrated in the following video \cite{VHvideo}. At the end of the day, it can be presented as the following object (illustration taken from \cite{hypercubic}):
 \begin{figure}[h]
@@ -625,7 +626,6 @@ The first part of the work was to give a formalized definition of the \textbf{hy
 \end{figure}\\
 Our goal is to define this object as a HIT, since we can already see what vertices,edges should be there. There are a few things that should be thought of however. First, this HIT would require filling a cube which can be a little tricky. Second, opposite faces are actually the same under a quarter turn rotation so this should also be sorted ouf within our HIT and this kind of structure didn't appear for the circle or the torus we previously saw. It should also be noted that filling squares is feasible in HoTT since it is tantamount to a commuting square of paths. However, filling cubes ought to be much more complicated since it deals with relations on squares. This is where cubical type theory comes in very handy for our purpose.\\
 So, the first part of the work during this internship was to comprehend the specificites of cubical type theory (that were explained previously), getting familiar with filling squares and cubes to be able to tackle the more complex case of the hypercubic manifold. To do so, I defined a few different HITs involving increasingly difficult structures with squares, cubes or sides/edges being flipped to get as close as possible to our goal. All these HITs can be found in the GitHub repository \cite{repo} in "HiTs.agda". 
-\newpage
 \paragraph{The hypercubic manifold} For starters, let's name the vertice constructors $b^V$ and $w^V$ (for blue and white vertices) and the edge constructors $b^E$, $r^E$, $g^E$, $y^E$ (for blue,red,green,yellow edges) as figure 2.1 suggests. Now, a filled square : 
 \begin{center}
   \begin{tikzcd}
@@ -689,9 +689,10 @@ And this is a presentation of the quaternion group.
   \end{minipage}
 \end{proof}
 \section{A first fiber calculation}
-For the rest of the report we will be interested in calculating fibers of some maps. Let's begin with a definition : 
+Now, we have already encountered the \textbf{loop space} of a type $A$. A natural question is : given a pointed type $(A,a)$, does there exist a pointed type $(B,b)$ such that $\Omega(B,b)=(A,a)$ ? For a group $G$ (pointed at its unit element) the answer is yes and one can "easily" create such a space (it is done in \cite{cubicalagda} HITs/EilenbergMacLane1/Base.agda). We will call such a space a \textbf{delooping} of $G$ that we will note $\mathrm{B}G$ (in HoTT all deloopings are actually equal). The idea is to build a HIT with one point constructor, a loop for every element (you could restrain this to every generator of $G$) in $G$ and add relations between those loops so that the group structure of the loop space at this point is the same as G . By the arguments of the previous section, this will yield the correct fundamental group, but it can muck up higher homotopy groups so we take the $1$-truncation of this type to kill off all the higher homotopy groups. This can be shown to indeed produce the loop space, but that's not what interests us. A famous theorem in algebraic topology (see \cite{hott}) is that $\mathrm{B}\mathbb Z = \mathbb{S}^1$.\\
+The thing to note is that this construction uses a \textbf{1-truncation}, which is known to work theoretically but we really do not have a good understanding of what it actually does. We would then want to build some deloopings in a more "natural" or constructive way. Specifically, achieving a ceullar delooping (that is, as a cell complex), would allow us to have some induction principles that aren't restrained to $1$-types (as it is the case with the previous construction). This would then open up to defining some \textbf{higher group actions} (that is, not only on sets but also on $1$-types, $2$-types etc) and computing \textbf{cohomology} in the synthetic framework of HoTT, and perharps, computer-check those calculations. In that regard, my advisors have a way to build such a delooping of the quaternion group $\mathcal Q$ from the hypercubic manifold $\mathbb{HM}^1$, but this whole construction relies on the calculation of the $\textbf{fiber}$ of a certain map, and this is what will be looking at from now on. I'll first start by exposing a preliminary calculation that I was given to do to get a grasp on the tools we have at hands. This calculation is motivated by some other work my advisors are doing on loop spaces of cyclic groups, where they wanted to check one of their claims with a calculation.
 \begin{mydef}
-  let $f : A \rightarrow B$ be a map and $b : B$, we define the fiber of $f$ over $b$ by : 
+  Let $f : A \rightarrow B$ be a map and $b : B$, we define the fiber of $f$ over $b$ by : 
   $$\mathrm{fib}_f(b) \hspace{3pt} :\equiv \sum_{x: A} f(x)=_B b$$
 \end{mydef}
 An interesting way to see the fiber of a map is via a pullback square \ref{fig:pullbacksquare}. For $b :B$ let $b_*$ be the map $\mathbf{1} \rightarrow B$ sending the canonical element $*$ to $b$. The the pullback of $f$ and $b_*$ is equivalent to the fiber $\mathrm{fib}_f(b)$ : 
@@ -707,13 +708,15 @@ A \times_B \textbf{1} :
 &\equiv \sum_{x :A} \sum_{y : \textbf{1}} f(x)=b_*(y)\\
 &\simeq \sum_{x : A} f(x)=b_*(*) \text{\quad \quad (this follows from the type \textbf{1} being uniquely inhabited, see \cite{hott})}\\
 :&\equiv\mathrm{fib}_f(b)
-\end{align}
-Let $m$ be a nonnegative integer and $r \in \mathbb{Z}_m^{\times}$ (the integers mod $m$). Then we have a short exact sequence of groups : 
+\end{align} 
+Let now $m$ be a nonnegative integer and $r \in \mathbb{Z}_m^{\times}$ (the integers mod $m$). Then we have a short exact sequence of groups : 
 $$\mathbb{Z} \xrightarrow{\times m} \mathbb{Z} \xrightarrow{1 \mapsto \overline r} \mathbb Z_m$$
-Which yields another short exact sequence (using the fact that $\mathbb{S}^1 = \mathrm{B} \mathbb Z$):
-$$\mathbb{S}^1 \xrightarrow{\mathrm{base} \mapsto \mathrm{base}} \mathbb{S}^1 \xrightarrow{1 \mapsto \overline r} \mathrm{B}\mathbb{Z}_m$$
+Which, for  topological reasons, yields a a fibration of delooping spaces, where we identify $\mathrm{B}\mathbb Z$ and $\mathbb S^1$ as explained previously:
+$$\mathbb{S}^1 \xrightarrow{\mathrm{base} \mapsto \mathrm{base}, \quad  \mathrm{loop} \mapsto \mathrm{loop}^m} \mathbb{S}^1 \xrightarrow{g} \mathrm{B}\mathbb{Z}_m$$
+This is in fact a fibration which base space is $\mathrm{B}\mathbb{Z}_m$, of total space $\mathbb{S}^1$, and for which the fiber of $g$ over the canonical element of $\mathrm{B}\mathbb{Z}_m$ should be $\mathbb{S}^1$ (we will actually prove this claim). Now, let $\mathrm{Fin} \hspace{2pt} m$ be the finite type with $m$ elements $0,\ldots, (m-1)$ and $s_m$ denote the equivalence of $\mathrm{Fin} \hspace{2pt} m$ given by $x\mapsto x+1 \pmod m$. From the work of my advisors, it appears that the connected component of $(\mathrm{Fin \hspace{2pt}, s_m})$ in the type of $\mathbb Z_m$ types (that is types equipped with an equivalence whose order is $m$) is a delooping of $\mathbb{Z}_m$ (this is specific to cyclic groups). One can ignore the domain of the equivalence and so the connected component of $s_m$ is a delooping of $\mathbb Z_m$. Consequently, choosing this as a model of $\mathrm{B}\mathbb{Z}_m$, the map $g$ is given by : 
+$$g(\mathrm{base}) :\equiv \mathrm{base}, \quad \mathrm{ap}_g(\mathrm{loop}) :\equiv \mathrm{ua}(s_m^r)$$
 If $P : \mathrm{B}\mathbb{Z}_m \rightarrow \mathcal{U}$ is defined by $P :\equiv x \mapsto s_m = x$ then we have a fibration over $\mathbb{S}^1$ given by $P \circ g$ whose total space is by definition:
-$$\sum_{x : \mathbb{S}^1} P \circ g (x) :\equiv \sum_{x : \mathbb{S}^1}(g(x)=s_m) :\equiv \mathrm{fib}_f(s_m)$$ 
+$$\sum_{x : \mathbb{S}^1} P \circ g (x) :\equiv \sum_{x : \mathbb{S}^1}(g(x)=s_m) :\equiv \mathrm{fib}_g(s_m)$$ 
 Now, as $\mathbb{S}^1$ is defined by the coequalizer diagram \ref{fig:coequalizer} :
 \begin{center}
   \begin{tikzcd}
@@ -738,7 +741,7 @@ So, we went from calculating the fiber of a map to calculating the total space o
   Then, one has a coequalizer diagram between the total spaces: 
   \begin{center}
     \begin{tikzcd}
-      \sum_{x : B} P \circ c \circ f (x) \arrow[rrr, "{(b,x) \mapsto(g(b),p_b^*(x))}", shift left=3] \arrow[rrr, "{(b,x) \mapsto (f(b),x)}"', shift right=3] &  &  & \sum_{x : A} P \circ c (x) \arrow[rr, "{(a,x) \mapsto(c(a),x)}"] &  & \sum_{x : W} P(x)
+      \displaystyle \sum_{b : B} P \circ c \circ f (a) \arrow[rrr, "{(b,x) \mapsto(g(b),p_b^*(x))}", shift left=3] \arrow[rrr, "{(b,x) \mapsto (f(b),x)}"', shift right=3] &  &  & \displaystyle \sum_{a : A} P \circ c (a) \arrow[rr] &  & \displaystyle \sum_{w : W} P(w)
     \end{tikzcd}
   \end{center}
 \end{prop}
@@ -748,7 +751,7 @@ In our case, the lemma yields the following coequalizer diagram :
   s_m=s_m \arrow[rr, "\mathrm{Id}", shift left] \arrow[rr, "p \mapsto p^r"', shift right] &  & s_m=s_m \arrow[r] & \mathrm{fib}_g(s_m)
 \end{tikzcd}
 \end{center}
-Given that $(s_m = s_m) \simeq \mathrm{Fin} \hspace{2pt} m$ (the type with $m$ elements), we get that $\mathrm{fib}_g(s_m)$ is equivalent to the HIT $W$ defined by the following constructors : 
+Given that $(s_m = s_m) \simeq \mathrm{Fin} \hspace{2pt} m$ , we get that $\mathrm{fib}_g(s_m)$ is equivalent to the HIT $W$ defined by the following constructors : 
 \begin{itemize}
   \item $c : \mathrm{Fin} \hspace{2pt} m \mapsto W$
   \item $ p : \prod_{x : \mathrm{Fin}\hspace{2pt} m} (c(x) = c(s_m^r(x)))$
@@ -768,10 +771,29 @@ Since $r$ is coprime to $m$, it turns out that $s_m^r$ is of order $m$ so the or
 \end{center}
 And this is equivalent to the circle $\mathbb{S}^1$. By univalence we then have :
 $$\boxed{\mathrm{fib}_g(s_m) = \mathbb{S}^1}$$
-We won't be looking at the proof of the equivalence in details (it can be found in annexe here), but the idea is that the general case should come from the case $r=1$, and for $r=1$, we have that $p_0 \cdot p_1 \cdot \ldots \cdot p_m : c(0)=c(0)$ and we can successively contract each path $p_i : c(i)\rightarrow c(\overline{i+1}_r)$, to end up with a type with a constructor $c(0)$ and a path $p_0 : c(0) = c(0)$, which is the circle. \\
+We won't be looking at the proof of the equivalence in details (it can be found in annexe here), but the idea is that the general case should come from the case $r=1$, and for $r=1$, we have that $p_0 \cdot p_1 \cdot \ldots \cdot p_m : c(0)=c(0)$ and we can successively contract each path $p_i : c(i)\rightarrow c(\overline{i+1}_r)$, to end up with a type with a constructor $c(0)$ and a path $p_0 : c(0) = c(0)$, which is the circle. \\\\
 I also proved an extension of this result (still in the annex) to the case where $r$ and $m$ are not coprime. In that case, let $\delta$ be the $\gcd$ of $r$ and $m$, then $s_m^r$ is now only of order $\frac m{\delta}$, and so our type is composed of $\delta$ disjoint orbits of size $\frac m{\delta}$, each orbit looking like the types we were previously looking at. We then naturally obtain : 
 $$\boxed{\mathrm{fib}_g(s_m) = \bigplus_{i=1}^{\delta} \mathbb{S}^1}$$
 \section{}
+We will be using another version of the flattening lemma with pushout types this time: 
+\begin{prop}
+  Suppose given a fibration over a pushout type: 
+  \begin{center}
+    \begin{tikzcd}
+      C \arrow[r, "g"] \arrow[d, "f"']                                                         & B \arrow[d, "\mathrm{inr}"] \arrow[ld, "\mathrm{glue}" description, Rightarrow] \arrow[rdd, "P \circ \mathrm{inr}" description, bend left] &            \\
+      A \arrow[r, "\mathrm{inl}"'] \arrow[rrd, "P \circ \mathrm{inl}" description, bend right] & A \sqcup_C B \arrow[rd, "P"]                                                                                                               &            \\
+                                                                                               &                                                                                                                                            & \mathcal U
+      \end{tikzcd}
+  \end{center}
+  Then, one has a pushout diagram of total spaces :
+  \begin{center} 
+    \begin{tikzcd}
+      \displaystyle \sum_{c : C} P \circ \mathrm{inl} \circ f (c) \arrow[dd, "{(c,x)\mapsto(f(c),x)}"'] \arrow[rr, "{(c,x) \mapsto (g(x),p_c^*(x))}", shift left=2] &  & \displaystyle \sum_{b : B} P \circ \mathrm{inr} (b) \arrow[dd] \arrow[lldd, "\mathrm{glue}" description, Rightarrow] \\
+                                                                                                                                                                    &  &                                                                                                                                                           \\
+      \sum_{a : A} P \circ \mathrm{inl} (a) \arrow[rr]                                                                       &  & \displaystyle \sum_{x : A \sqcup_C B} P(x)                                                                                                               
+    \end{tikzcd}
+  \end{center} 
+\end{prop}
 \printbibliography
 
 \end{document}
