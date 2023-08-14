@@ -753,12 +753,25 @@ Given that $(s_m = s_m) \simeq \mathrm{Fin} \hspace{2pt} m$ (the type with $m$ e
   \item $c : \mathrm{Fin} \hspace{2pt} m \mapsto W$
   \item $ p : \prod_{x : \mathrm{Fin}\hspace{2pt} m} (c(x) = c(s_m^r(x)))$
 \end{itemize}
-Since $r$ is coprime to $m$, it turns out that $s_m^r$ is of order $m$ so the orbit of $c(0)$ under the action of the group $\langle s_m^r \rangle$ is the whole type $W$, taking the example of $r=1$ one gets the following type : \\
+Since $r$ is coprime to $m$, it turns out that $s_m^r$ is of order $m$ so the orbit of $c(0)$ under the action of the group $\langle s_m^r \rangle$ is the whole type $W$, taking the example of $r=1$ and $m=4$ one gets the following type :
+\begin{center}
+  \begin{tikzpicture}[scale=0.55]
+    \draw (-2,0.5) .. controls (-2,1) and (-1,2) .. (-0.5,2) node [midway, above left] {$p_0$};
+    \draw (0.5,2) .. controls (1,2) and (2,1) .. (2,0.5) node [midway, above right] {$p_1$};
+    \draw (2,-0.5) .. controls (2,-1) and (1,-2) .. (0.5,-2) node [midway, below right] {$p_2$};
+    \draw (-0.5,-2) .. controls (-1,-2) and (-2,-1) .. (-2,-0.5) node [midway, below left] {$p_3$};
+    \node (A) at (-2,0) {$c(0)$};
+    \node (A) at (0,2) {$c(1)$};
+    \node (A) at (2,0) {$c(2)$};
+    \node (A) at (0,-2) {$c(3)$};
+  \end{tikzpicture}
+\end{center}
 And this is equivalent to the circle $\mathbb{S}^1$. By univalence we then have :
 $$\boxed{\mathrm{fib}_g(s_m) = \mathbb{S}^1}$$
 We won't be looking at the proof of the equivalence in details (it can be found in annexe here), but the idea is that the general case should come from the case $r=1$, and for $r=1$, we have that $p_0 \cdot p_1 \cdot \ldots \cdot p_m : c(0)=c(0)$ and we can successively contract each path $p_i : c(i)\rightarrow c(\overline{i+1}_r)$, to end up with a type with a constructor $c(0)$ and a path $p_0 : c(0) = c(0)$, which is the circle. \\
 I also proved an extension of this result (still in the annex) to the case where $r$ and $m$ are not coprime. In that case, let $\delta$ be the $\gcd$ of $r$ and $m$, then $s_m^r$ is now only of order $\frac m{\delta}$, and so our type is composed of $\delta$ disjoint orbits of size $\frac m{\delta}$, each orbit looking like the types we were previously looking at. We then naturally obtain : 
 $$\boxed{\mathrm{fib}_g(s_m) = \bigplus_{i=1}^{\delta} \mathbb{S}^1}$$
+\section{}
 \printbibliography
 
 \end{document}
