@@ -37,7 +37,11 @@
     in\\
     Homotopy Type Theory}
 \date{04/09/2023}
-\author{Dylan Laird}
+\author{{Dylan Laird} \\ 
+{\and} \\
+{Supervisors} \\
+{Samuel MIMRAM} \\ {Emile OLEON}}
+\institute{LIX, Polytechnique}
 
 \begin{document}
 
@@ -572,7 +576,17 @@
             Then there is a unique path $s$ from $c$ to $d$ that completes the square by making it commute, that is :
             $$ q \cdot s = p \cdot r $$
         \end{alertblock}
-
+    \end{frame}
+    \begin{frame}[fragile]
+        \frametitle{Why do we complete squares?}
+        \begin{center}
+            \begin{tikzcd}
+              {a_{0,1}} \arrow[rr, "s"]                                            & {}                                            & {a_{1,1}}                                            \\
+                                                                                   &                                               &                                                      \\
+              {a_{0,0}} \arrow[rr, "r"'] \arrow[uu, "p \equiv c \hspace{3pt} i_0"] & {} \arrow[uu, "c \hspace{3pt} i", shift left] & {a_{1,0}} \arrow[uu, "q \equiv c \hspace{3pt} i_1"'] \\
+              i_0 \arrow[rr, bend right]                                           & i                                             & i_1                                                 
+              \end{tikzcd} 
+          \end{center}
     \end{frame}
     \begin{frame}[fragile]
         \frametitle{Some other HITs (2) : The torus $\mathbb{T}^2$}
@@ -603,6 +617,18 @@
             b : $p \equiv p$
             fill : Square b b a a
         \end{lstlisting}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Somer other HITs : Fundamental groups}
+        \begin{exampleblock}{Fundamental group presentation}
+            Take a HIT with one point constructor. Then its fundamental group has a presentation given by its paths constructors and the relations between paths.
+        \end{exampleblock}
+        \pause
+        $$\pi_1(\mathbb{S}^1) = \mathbb{Z}$$
+        \pause
+        $$\pi_1(\mathbb{T}^2) = \mathbb{Z}^2$$
+        \pause
+        Given a presentation of $G$ we can build a space $H$ with $\pi_1(H) = G$.
     \end{frame}
     \section{Some work done during the internship}
     \subsection{Defining $\mathbb{HM}^1$}
