@@ -1,4 +1,4 @@
-{-# OPTIONS --cubical #-}
+{-# OPTIONS --cubical --guardedness #-}
 open import HiTs
 open import 1Skeleton
 open import Cubical.Foundations.Prelude

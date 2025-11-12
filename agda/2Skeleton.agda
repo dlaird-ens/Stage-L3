@@ -1,4 +1,4 @@
-{-# OPTIONS --cubical #-}
+{-# OPTIONS --cubical --guardedness #-}
 {-# OPTIONS --allow-unsolved-metas #-}
 
 open import HiTs

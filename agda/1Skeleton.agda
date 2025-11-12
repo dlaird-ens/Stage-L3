@@ -1,4 +1,4 @@
-{-# OPTIONS --cubical #-}
+{-# OPTIONS --cubical --guardedness #-}
 open import HiTs
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.Path
